@@ -3,7 +3,7 @@ class SafaChatWidget extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
 
-    this.apiKey = "uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5";
+    this.apiKey = this.getAttribute('api-key') || 'uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5';
 
     this.shadowRoot.innerHTML = `
       <style>
