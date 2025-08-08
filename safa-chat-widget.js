@@ -87,25 +87,43 @@ class SafaChatWidget extends HTMLElement {
     };
 
     send.onclick = async () => {
-      const message = input.value.trim();
-      if (!message) return;
+  const message = input.value.trim();
+  if (!message) return;
 
-      messages.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
-      input.value = '';
+  messages.innerHTML += `<div><strong>You:</strong> ${message}</div>`;
+  input.value = '';
 
-      const res = await fetch("https://safarepo-1.onrender.com/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": this.apiKey,
-        },
-        body: JSON.stringify({ message }),
-      });
+  try {
+    const res = await fetch("https://safarepo-1.onrender.com/chat", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": this.apiKey,
+      },
+      body: JSON.stringify({ message }),
+    });
 
-      const data = await res.json();
-      messages.innerHTML += `<div><strong>Safa:</strong> ${data.reply}</div>`;
+    if (!res.ok) {
+      // If status is not 200, log error to console and show message in widget
+      const errorText = await res.text();
+      console.error(`Error ${res.status}:`, errorText);
+      messages.innerHTML += `<div style="color:red;"><strong>Error ${res.status}:</strong> ${errorText}</div>`;
       messages.scrollTop = messages.scrollHeight;
-    };
+      return;
+    }
+
+    const data = await res.json();
+    messages.innerHTML += `<div><strong>Safa:</strong> ${data.reply}</div>`;
+    messages.scrollTop = messages.scrollHeight;
+
+  } catch (err) {
+    // Network or unexpected errors
+    console.error('Fetch error:', err);
+    messages.innerHTML += `<div style="color:red;"><strong>Network error:</strong> ${err.message}</div>`;
+    messages.scrollTop = messages.scrollHeight;
+  }
+};
+
   }
 }
 
