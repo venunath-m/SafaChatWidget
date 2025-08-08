@@ -273,4 +273,4 @@ class SafaChatWidget extends HTMLElement {
   }
 }
 
-customElements.define('safa-chat-widget', SafaChatWidget);
+customElements.define('SafaChatWidget', SafaChatWidget);
