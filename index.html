@@ -2,13 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Safa Chat Widget Test</title>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Widget Script -->
   <script src="/safa-chat-widget.js" defer></script>
 </head>
 <body>
-  <h1>Testing Safa Widget</h1>
+  <div class="container">
+    <header>
+      <h1>🚀 Safa Chat Widget Test</h1>
+      <p class="subtitle">
+        This page is for testing the Safa Chat Widget integration with API key authentication.
+      </p>
+    </header>
 
-  <!-- Place the widget below -->
-  <safa-chat-widget api-key="demo-api-key"></safa-chat-widget>
+    <main>
+      <div class="widget-box">
+        <safa-chat-widget api-key="demo-api-key"></safa-chat-widget>
+      </div>
+    </main>
+
+    <footer>
+      <p>Made with ❤️ by the Naga Team</p>
+    </footer>
+  </div>
 </body>
 </html>

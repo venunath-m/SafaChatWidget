@@ -1,0 +1,48 @@
+/* General Page Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to bottom right, #f7f9fc, #e3e9f0);
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Center Content */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Header */
+header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #1d3557;
+}
+
+.subtitle {
+  font-size: 1rem;
+  color: #555;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+/* Widget Box */
+.widget-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  display: inline-block;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Footer */
+footer {
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: #888;
+}

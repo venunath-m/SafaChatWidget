@@ -1,0 +1,7 @@
+services:
+  - type: static_site
+    name: safa-chat-widget
+    env: static
+    buildCommand: ""
+    staticPublishPath: .
+    pullRequestPreviewsEnabled: false
