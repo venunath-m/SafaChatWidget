@@ -24,6 +24,27 @@ class SafaChatWidget extends HTMLElement {
           --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
           --zindex: 10000;
         }
+        #chat-button {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: var(--primary-color);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 60px;
+          height: 60px;
+          font-size: 28px;
+          cursor: pointer;
+          z-index: var(--zindex);
+          box-shadow: var(--box-shadow);
+          display: flex;  /* Make sure it is NOT display:none */
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.3s ease, box-shadow 0.6s ease-in-out;
+          user-select: none;
+          animation: pulse 3s infinite;
+        }
 
         #input button {
           background: var(--primary-color);
