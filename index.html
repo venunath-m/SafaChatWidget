@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Safa Chat Widget Test</title>
+  <title>Safa Chat Widget Demo & Info</title>
 
   <style>
     body {
@@ -31,6 +31,8 @@
     header .subtitle {
       font-size: 1.15rem;
       color: #555;
+      max-width: 480px;
+      margin: auto;
     }
     main {
       background: white;
@@ -44,6 +46,136 @@
       justify-content: center;
       position: relative;
     }
+
+    /* How to Use Section */
+    #how-to-use {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: #f0f8ff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,123,255,0.15);
+    }
+    #how-to-use h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 1.5rem;
+    }
+    #how-to-use h3 {
+      color: #0056b3;
+      margin-bottom: 0.6rem;
+    }
+    #how-to-use p, #how-to-use ul {
+      color: #333;
+      margin-bottom: 1.5rem;
+    }
+    #how-to-use ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+    }
+    #how-to-use pre {
+      background: #e9f0ff;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: Consolas, monospace;
+      margin-bottom: 1.5rem;
+    }
+
+    /* FAQ Accordion */
+    #faq {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 0 1rem;
+    }
+    #faq h2 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 1.5rem;
+    }
+    .accordion-item {
+      background: white;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
+      overflow: hidden;
+    }
+    .accordion-header {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      user-select: none;
+    }
+    .accordion-content {
+      max-height: 0;
+      padding: 0 1.5rem;
+      background: white;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+      overflow: hidden;
+    }
+    .accordion-content.open {
+      padding: 1rem 1.5rem;
+      max-height: 200px; /* enough for content */
+    }
+
+    /* Query/Suggestion Form */
+    #query-form {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 2rem;
+      background: #e7f1ff;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0,123,255,0.1);
+    }
+    #query-form h2 {
+      text-align: center;
+      color: #0056b3;
+      margin-bottom: 1.5rem;
+    }
+    #query-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #003366;
+    }
+    #query-form input, #query-form textarea {
+      width: 100%;
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #007bff;
+      border-radius: 6px;
+      font-size: 1rem;
+      resize: vertical;
+    }
+    #query-form button {
+      background: #007bff;
+      color: white;
+      font-weight: 700;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease;
+    }
+    #query-form button:hover {
+      background: #0056b3;
+    }
+    #query-success {
+      color: green;
+      font-weight: 700;
+      margin-top: 1rem;
+      text-align: center;
+    }
+    #query-error {
+      color: red;
+      font-weight: 700;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
     footer {
       text-align: center;
       padding: 1rem 0;
@@ -63,13 +195,10 @@
 <body>
   <div class="container">
     <header>
-      <h1>🚀 Safa Chat Widget Demo</h1>
+      <h1>🚀 Safa Chat Widget Demo &amp; Info</h1>
       <p class="subtitle">
-        Test and interact with the <strong>Safa Chat Widget</strong>, featuring API key authentication, voice input, and a typing animation.
-      </p>
-      <p style="font-size: 0.9rem; color: #666; max-width: 480px; margin: auto;">
-        Click the chat button 💬 at the bottom right to open the chat widget.<br/>
-        Type a message or use the mic 🎤 to speak. The bot responds with smart answers or FAQs from your company data.
+        Test and interact with the <strong>Safa Chat Widget</strong>, featuring API key authentication, voice input, and a typing animation.<br/>
+        Use the sections below to learn how to integrate Baby Safa on your site, see FAQs, and submit your queries or suggestions.
       </p>
     </header>
 
@@ -77,11 +206,176 @@
       <div class="widget-box">
         <safa-chat-widget api-key="uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5"></safa-chat-widget>
       </div>
+
+      <!-- How to Use Section -->
+      <section id="how-to-use" aria-label="How to use Baby Safa Widget">
+        <h2>How to Use Baby Safa Widget</h2>
+
+        <div>
+          <h3>1. Get Your API Key</h3>
+          <p>
+            Sign up on our platform to receive a unique API key that authenticates your widget usage.<br/>
+            <a href="/signup" style="color: #007bff; text-decoration: underline;">Go to Signup &amp; API Key Request</a>
+          </p>
+        </div>
+
+        <div>
+          <h3>2. Embed the Widget on Your Site</h3>
+          <p>Copy and paste this code snippet into your website's HTML where you want Baby Safa to appear:</p>
+          <pre>
+&lt;safa-chat-widget api-key="YOUR_API_KEY_HERE"&gt;&lt;/safa-chat-widget&gt;
+&lt;script src="https://yourdomain.com/SafaChatWidget.js" defer&gt;&lt;/script&gt;
+          </pre>
+        </div>
+
+        <div>
+          <h3>3. Customize FAQs &amp; Business Data</h3>
+          <p>
+            Add FAQs and training data through your dashboard so Baby Safa understands your business and provides accurate assistance to your customers.
+          </p>
+        </div>
+
+        <div>
+          <h3>4. Features to Enjoy</h3>
+          <ul>
+            <li>Text and Voice Chat with smooth animations</li>
+            <li>Responsive and mobile-friendly design</li>
+            <li>Secure API key authentication</li>
+            <li>Customizable styles and chat behaviors</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>5. Pro Tips</h3>
+          <ul>
+            <li>Place the widget near the bottom-right corner for best user experience</li>
+            <li>Keep your API key confidential and do not expose it publicly without controls</li>
+            <li>Regularly update your FAQs to keep the chatbot relevant</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Need Help?</h3>
+          <p>
+            Reach out to our support team via <a href="mailto:fallenangelnaga@nagasoftsolutions.com">email</a> or  
+            <a href="https://wa.me/918590216646" target="_blank" rel="noopener noreferrer">WhatsApp</a>.
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ Accordion Section -->
+      <section id="faq" aria-label="Frequently Asked Questions">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="accordion-item">
+          <div class="accordion-header" tabindex="0">How do I get an API key?</div>
+          <div class="accordion-content">
+            <p>Sign up on our platform and request your unique API key from your dashboard.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" tabindex="0">Can I customize the chat widget's appearance?</div>
+          <div class="accordion-content">
+            <p>Yes! You can customize colors and styles by overriding CSS variables in your site’s CSS.</p>
+          </div>
+        </div>
+
+        <div class="accordion-item">
+          <div class="accordion-header" tabindex="0">Is the chat widget mobile friendly?</div>
+          <div class="accordion-content">
+            <p>Absolutely! The widget is responsive and works great on all devices.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Query & Suggestion Form -->
+      <section id="query-form" aria-label="Submit Queries and Suggestions">
+        <h2>Submit Your Queries & Suggestions</h2>
+        <form id="suggestionForm">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your name" required />
+
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" required />
+
+          <label for="message">Your Message (query, suggestion, prompt)</label>
+          <textarea id="message" name="message" rows="4" placeholder="Write your message here..." required></textarea>
+
+          <button type="submit">Submit</button>
+          <div id="query-success" role="alert" aria-live="polite" style="display:none;">Thank you for your submission!</div>
+          <div id="query-error" role="alert" aria-live="assertive" style="display:none;">Oops! Something went wrong. Please try again.</div>
+        </form>
+      </section>
     </main>
   </div>
 
   <footer>
     <p>Made with ❤️ by the Naga Team</p>
   </footer>
+
+  <script>
+    // Accordion toggle behavior
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+        if(content.classList.contains('open')) {
+          content.classList.remove('open');
+        } else {
+          document.querySelectorAll('.accordion-content.open').forEach(openContent => openContent.classList.remove('open'));
+          content.classList.add('open');
+        }
+      });
+      header.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          header.click();
+        }
+      });
+    });
+
+    // Handle query & suggestion form submission
+    const form = document.getElementById('suggestionForm');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const successMsg = document.getElementById('query-success');
+      const errorMsg = document.getElementById('query-error');
+
+      successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
+
+      const formData = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        message: form.message.value.trim(),
+      };
+
+      // Basic validation (already required on inputs, just extra)
+      if(!formData.name || !formData.email || !formData.message) {
+        errorMsg.textContent = 'Please fill out all fields.';
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      try {
+        // Replace with your real API endpoint for submission
+        const response = await fetch('/api/submit-suggestion', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        if(response.ok) {
+          successMsg.style.display = 'block';
+          form.reset();
+        } else {
+          throw new Error('Server error');
+        }
+      } catch (error) {
+        errorMsg.textContent = 'Submission failed. Please try again later.';
+        errorMsg.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
