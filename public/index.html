@@ -10,18 +10,7 @@
       background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
-      }
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    }    
     body, html {
       margin: 0;
       padding: 0;
@@ -272,6 +261,16 @@
         padding: 1rem 1rem;
       }
     }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
+      }
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
   </style>
 
@@ -411,7 +410,7 @@
       </section>
       <section id="suggestions">
         <h2>Suggestions from Users</h2>
-        <ul id="suggestion-list">         
+        <ul id="suggestionlist">         
         </ul>
       </section>
 
@@ -562,7 +561,7 @@
         if (!res.ok) throw new Error('Network response was not ok');
         const suggestions = await res.json();
 
-        const list = document.getElementById('suggestion-list');
+        const list = document.getElementById('suggestionlist');
         if (!list) {
           console.error('Suggestion list element not found');
           return;
