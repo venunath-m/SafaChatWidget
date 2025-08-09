@@ -1,13 +1,19 @@
 class SafaChatWidget extends HTMLElement {
   constructor() {
     super();
+    if (!document.getElementById('fontawesome-css')) {
+      const link = document.createElement('link');
+      link.id = 'fontawesome-css';
+      link.rel = 'stylesheet';
+      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+      document.head.appendChild(link);
+    }
     this.attachShadow({ mode: 'open' });
 
     this.apiKey = this.getAttribute('api-key') || 'uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5';
 
     this.shadowRoot.innerHTML = `
       <style>
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
 
         :host {
           font-family: Arial, sans-serif;
@@ -19,26 +25,29 @@ class SafaChatWidget extends HTMLElement {
           --zindex: 10000;
         }
 
-        #chat-button {
-          position: fixed;
-          bottom: 20px;
-          right: 20px;
+        #input button {
           background: var(--primary-color);
           color: white;
           border: none;
           border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          font-size: 28px;
+          width: 40px;
+          height: 40px;
+          margin-left: 8px;
           cursor: pointer;
-          z-index: var(--zindex);
-          box-shadow: var(--box-shadow);
+          font-size: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background-color 0.3s ease, box-shadow 0.6s ease-in-out;
-          user-select: none;
-          animation: pulse 3s infinite;
+          transition: background-color 0.3s ease;
+          box-shadow: 0 0 8px #007bffaa;
+        }
+        #input button:hover {
+          background-color: #0056b3;
+          box-shadow: 0 0 12px #0056b3cc;
+        }
+        #send-btn i, #mic-btn i {
+          font-size: 20px;
+          pointer-events: none;
         }
         #chat-button:hover {
           background-color: #0056b3;
@@ -189,7 +198,7 @@ class SafaChatWidget extends HTMLElement {
         }
       </style>
 
-      <button id="chat-button" aria-label="Open Safa Chat">💬</button>
+      <button id="chat-button" aria-label="Chat With Safa">💬</button>
       <div id="chat-label">Safa</div>
 
       <div id="chat-box" role="region" aria-live="polite" aria-label="Safa Chat Widget">
@@ -206,10 +215,9 @@ class SafaChatWidget extends HTMLElement {
           <button id="send-btn" aria-label="Send message">
             <i class="fa-solid fa-paper-plane"></i>
           </button>
-          <div id="typing-indicator">
-            <!-- Lottie animation container -->
+          <div id="typing-indicator" style="display:none;">
             <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_tyqe4oog.json"  
-              background="transparent"  speed="1"  style="width: 40px; height: 40px;"  loop  autoplay>
+              background="transparent" speed="1" style="width: 40px; height: 40px;" loop autoplay>
             </lottie-player>
           </div>
         </div>
