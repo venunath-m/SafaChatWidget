@@ -536,10 +536,11 @@
       return div.innerHTML;
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      loadSuggestions();
-      setInterval(loadSuggestions, 30000);
-    });
+  window.onload = () => {
+    loadSuggestions();
+    setInterval(loadSuggestions, 30000);
+  };
+
 
 </script>
 </body>
