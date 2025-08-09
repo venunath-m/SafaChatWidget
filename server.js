@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const GMAIL_USER = process.env.GMAIL_USER || "venunathm30@gmail.com";
 const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "qgup vyht qbdh aknx";
 
-const suggestionsFile = path.join(process.cwd(), 'suggestions.json');
+const suggestionsFile = path.join(process.cwd(), 'public', 'suggestions.json');
 let suggestions = [];
 
 // Load suggestions on startup (move this above routes)
@@ -35,8 +35,9 @@ app.use(express.json());
 
 // API routes
 app.get('/', (req, res) => {
-  res.sendFile(path.join(process.cwd(), 'index.html'));
+  res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
+
 
 app.get('/api/faqs', (req, res) => {
   res.json([
@@ -97,7 +98,7 @@ ${message}
 });
 
 // Static files (put after API routes)
-app.use(express.static(path.join(process.cwd())));
+app.use(express.static(path.join(process.cwd(), 'public')));
 
 // 404 handler
 app.use((req, res) => {
