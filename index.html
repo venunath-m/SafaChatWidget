@@ -10,18 +10,7 @@
       background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
       background-size: 400% 400%;
       animation: gradientShift 15s ease infinite;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
-      }
-    }
-    @keyframes gradientShift {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    }    
     body, html {
       margin: 0;
       padding: 0;
@@ -205,30 +194,89 @@
     footer p {
       margin: 0;
     }
+    #suggestions ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: #004085;
+    }
+    #suggestions li {
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+    /* Mobile Friendly Responsive Styles */
+    @media (max-width: 600px) {
+      body, html {
+        font-size: 14px;
+      }
+      .container {
+        padding: 1rem 1rem 2rem;
+        max-width: 100%;
+      }
+      header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+      }
+      header .subtitle {
+        font-size: 1rem;
+        max-width: 100%;
+        padding: 0 0.5rem;
+      }
+      main {
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .widget-box {
+        flex-direction: column;
+        padding: 0 0.5rem;
+      }
+      /* Accordion headers and content adjustments */
+      .accordion-header {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+      .accordion-content.open {
+        max-height: none; /* allow expanding naturally */
+      }
+      /* Form inputs and buttons full width */
+      #query-form input,
+      #query-form textarea,
+      #suggestionOnlyForm input,
+      #suggestionOnlyForm textarea {
+        font-size: 1rem;
+      }
+      #query-form button,
+      #suggestionOnlyForm button {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+      }
+      /* Footer font smaller */
+      footer p {
+        font-size: 0.9rem;
+      }
+      /* Reduce padding/margins on sections */
+      #how-to-use, #faq, #query-form, #suggestion-form, #suggestions {
+        margin: 1.5rem 0;
+        padding: 1rem 1rem;
+      }
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
+      }
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
   </style>
 
   <!-- Widget Script -->
   <script src="/SafaChatWidget.js" defer></script>
-  <script>
-  async function loadSuggestions() {
-  try {
-    const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
-    const suggestions = await res.json();
-    const list = document.getElementById('suggestion-list');
-    list.innerHTML = '';
-    suggestions.forEach(s => {
-      const li = document.createElement('li');
-      li.textContent = `${s.name} says: "${s.message}"`;
-      list.appendChild(li);
-    });
-  } catch(e) {
-    console.error('Failed to load suggestions', e);
-  }
-}
-loadSuggestions();
-setInterval(loadSuggestions, 30000);
-
-</script>
+  
 </head>
 <body>
   <div class="container">
@@ -360,7 +408,10 @@ setInterval(loadSuggestions, 30000);
           </div>
         </form>
       </section>
-
+      <section aria-label="User Suggestions" >
+        <h2>Suggestions from Users</h2>
+        <ul id="suggestionlist"></ul>
+      </section>
 
       <!-- FAQ Accordion Section -->
       <section id="faq" aria-label="Frequently Asked Questions">
@@ -470,7 +521,6 @@ setInterval(loadSuggestions, 30000);
         errorMsg.style.display = 'block';
       }
     });
-
     // Query-only form submission (send email only)
     document.getElementById('queryOnlyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -504,6 +554,50 @@ setInterval(loadSuggestions, 30000);
         errorMsg.style.display = 'block';
       }
     });
+    async function loadSuggestions() {
+      try {
+        const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
+        if (!res.ok) throw new Error('Network response was not ok');
+        const suggestions = await res.json();
+
+        const list = document.getElementById('suggestionlist');
+        if (!list) {
+          console.error('Suggestion list element not found');
+          return;
+        }
+        list.innerHTML = '';
+
+        suggestions.forEach(s => {
+          // Format the date nicely
+          const dateObj = new Date(s.date);
+          const formattedDate = dateObj.toLocaleString(undefined, { 
+            dateStyle: 'medium', 
+            timeStyle: 'short' 
+          });
+
+          // Create list item with name, message and date
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${escapeHtml(s.name)}</strong> says:<br/>"${escapeHtml(s.message)}"<br/><small><em>${formattedDate}</em></small>`;
+          list.appendChild(li);
+        });
+      } catch (e) {
+        console.error('Failed to load suggestions', e);
+      }
+    }
+
+    // Simple helper to escape HTML special chars to avoid XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+  window.onload = () => {
+    loadSuggestions();
+    setInterval(loadSuggestions, 30000);
+  };
+
+
 </script>
 </body>
 </html>
