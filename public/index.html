@@ -205,6 +205,16 @@
     footer p {
       margin: 0;
     }
+    #suggestions ul {
+      list-style-type: disc;
+      padding-left: 1.5rem;
+      color: #004085;
+    }
+    #suggestions li {
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
   </style>
 
   <!-- Widget Script -->
@@ -499,7 +509,9 @@
               return;
             }
             list.innerHTML = '';
-
+            if (suggestions.length === 0) {
+                list.innerHTML = '<li>No suggestions yet. Be the first to submit one!</li>';
+            }
             suggestions.forEach(s => {
               const li = document.createElement('li');
               li.textContent = `${s.name} says: "${s.message}"`;
