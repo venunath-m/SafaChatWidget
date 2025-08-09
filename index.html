@@ -7,11 +7,28 @@
 
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0; padding: 0; background: #f5f7fa; color: #333;
+      background: linear-gradient(270deg, #ff6a00, #ee0979, #ff6a00);
+      background-size: 600% 600%;
+      animation: gradientShift 16s ease infinite;
+    }
+    @media (prefers-color-scheme: dark) {
+      body {
+        background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
+      }
+    }
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      color: #333;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
     }
     .container {
       max-width: 960px;
@@ -191,6 +208,27 @@
 
   <!-- Widget Script -->
   <script src="/SafaChatWidget.js" defer></script>
+  <script>
+  async function loadSuggestions() {
+    try {
+      const res = await fetch('/api/suggestions');
+      const suggestions = await res.json();
+      const list = document.getElementById('suggestion-list');
+      list.innerHTML = '';
+      suggestions.forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = `${s.name} says: "${s.message}"`;
+        list.appendChild(li);
+      });
+    } catch(e) {
+      console.error('Failed to load suggestions', e);
+    }
+  }
+  // Load suggestions on page load
+  loadSuggestions();
+  // Optionally reload every 30 seconds
+  setInterval(loadSuggestions, 30000);
+</script>
 </head>
 <body>
   <div class="container">
@@ -302,6 +340,10 @@
           <li>How to Build a ChatGPT-Like AI Chatbot in Flutter (With Voice!)</li>
           <li>Personal AI Chatbot with Flutter + ChatGPT + Voice — Step by Step</li>
         </ul>
+      </section>
+      <section id="live-suggestions">
+        <h3>What People Are Saying</h3>
+        <ul id="suggestion-list"></ul>
       </section>
 
 
