@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 // Gmail SMTP credentials (put real secrets in environment variables in production)
 const GMAIL_USER = process.env.GMAIL_USER || "venunathm30@gmail.com";
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "qgup vyht qbdh aknx";
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "qgupvyhtqbdhaknx";
 const suggestions = []; // store suggestions in-memory
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -38,13 +38,11 @@ app.post('/api/submit-suggestion', async (req, res) => {
   }
 
   try {
-    // Save suggestion to in-memory array
     suggestions.push({ name, message, date: new Date().toISOString() });
 
-    // Prepare email options
     const mailOptions = {
-      from: `"${name}" <${GMAIL_USER}>`,  // sender address
-      to: "fallenangelnaga@nagasoftsolutions.com", // receiver address
+      from: `"${name}" <${GMAIL_USER}>`,
+      to: "fallenangelnaga@nagasoftsolutions.com",
       subject: `New Suggestion from ${name}`,
       text: `
         You have a new suggestion/query from the website:
@@ -57,7 +55,6 @@ app.post('/api/submit-suggestion', async (req, res) => {
       `,
     };
 
-    // Send mail
     await transporter.sendMail(mailOptions);
 
     console.log('Suggestion email sent and saved:', { name, email, message });
@@ -68,6 +65,7 @@ app.post('/api/submit-suggestion', async (req, res) => {
     res.status(500).json({ error: "Failed to send email" });
   }
 });
+
 
 
 app.get('/api/suggestions', (req, res) => {

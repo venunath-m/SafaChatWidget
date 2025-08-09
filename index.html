@@ -7,10 +7,11 @@
 
   <style>
     body {
-      background: linear-gradient(270deg, #ff6a00, #ee0979, #ff6a00);
-      background-size: 600% 600%;
-      animation: gradientShift 16s ease infinite;
+      background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
     }
+
     @media (prefers-color-scheme: dark) {
       body {
         background: linear-gradient(270deg, #1a1a1a, #333, #1a1a1a);
@@ -210,24 +211,23 @@
   <script src="/SafaChatWidget.js" defer></script>
   <script>
   async function loadSuggestions() {
-    try {
-      const res = await fetch('/api/suggestions');
-      const suggestions = await res.json();
-      const list = document.getElementById('suggestion-list');
-      list.innerHTML = '';
-      suggestions.forEach(s => {
-        const li = document.createElement('li');
-        li.textContent = `${s.name} says: "${s.message}"`;
-        list.appendChild(li);
-      });
-    } catch(e) {
-      console.error('Failed to load suggestions', e);
-    }
+  try {
+    const res = await fetch('/api/suggestions');
+    const suggestions = await res.json();
+    const list = document.getElementById('suggestion-list');
+    list.innerHTML = '';
+    suggestions.forEach(s => {
+      const li = document.createElement('li');
+      li.textContent = `${s.name} says: "${s.message}"`;
+      list.appendChild(li);
+    });
+  } catch(e) {
+    console.error('Failed to load suggestions', e);
   }
-  // Load suggestions on page load
-  loadSuggestions();
-  // Optionally reload every 30 seconds
-  setInterval(loadSuggestions, 30000);
+}
+loadSuggestions();
+setInterval(loadSuggestions, 30000);
+
 </script>
 </head>
 <body>
