@@ -212,7 +212,7 @@
   <script>
   async function loadSuggestions() {
   try {
-    const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
+    const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions' );
     const suggestions = await res.json();
     const list = document.getElementById('suggestion-list');
     list.innerHTML = '';
