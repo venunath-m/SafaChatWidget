@@ -498,32 +498,49 @@
         errorMsg.style.display = 'block';
       }
     });
-    document.addEventListener('DOMContentLoaded', () => {
-      async function loadSuggestions() {
-        try {
-          const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
-          const suggestions = await res.json();
-          const list = document.getElementById('suggestion-list');
-            if (!list) {
-              console.error('Suggestion list element not found');
-              return;
-            }
-            list.innerHTML = '';
-            if (suggestions.length === 0) {
-                list.innerHTML = '<li>No suggestions yet. Be the first to submit one!</li>';
-            }
-            suggestions.forEach(s => {
-              const li = document.createElement('li');
-              li.textContent = `${s.name} says: "${s.message}"`;
-              list.appendChild(li);
-            });
-        } catch(e) {
-          console.error('Failed to load suggestions', e);
+    async function loadSuggestions() {
+      try {
+        const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
+        if (!res.ok) throw new Error('Network response was not ok');
+        const suggestions = await res.json();
+
+        const list = document.getElementById('suggestion-list');
+        if (!list) {
+          console.error('Suggestion list element not found');
+          return;
         }
+        list.innerHTML = '';
+
+        suggestions.forEach(s => {
+          // Format the date nicely
+          const dateObj = new Date(s.date);
+          const formattedDate = dateObj.toLocaleString(undefined, { 
+            dateStyle: 'medium', 
+            timeStyle: 'short' 
+          });
+
+          // Create list item with name, message and date
+          const li = document.createElement('li');
+          li.innerHTML = `<strong>${escapeHtml(s.name)}</strong> says:<br/>"${escapeHtml(s.message)}"<br/><small><em>${formattedDate}</em></small>`;
+          list.appendChild(li);
+        });
+      } catch (e) {
+        console.error('Failed to load suggestions', e);
       }
+    }
+
+    // Simple helper to escape HTML special chars to avoid XSS
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
       loadSuggestions();
       setInterval(loadSuggestions, 30000);
     });
+
 </script>
 </body>
 </html>
