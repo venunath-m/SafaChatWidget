@@ -38,6 +38,9 @@ app.post('/api/submit-suggestion', async (req, res) => {
   }
 
   try {
+    // Save suggestion to in-memory array
+    suggestions.push({ name, message, date: new Date().toISOString() });
+
     // Prepare email options
     const mailOptions = {
       from: `"${name}" <${GMAIL_USER}>`,  // sender address
@@ -57,14 +60,15 @@ app.post('/api/submit-suggestion', async (req, res) => {
     // Send mail
     await transporter.sendMail(mailOptions);
 
-    console.log('Suggestion email sent:', { name, email, message });
+    console.log('Suggestion email sent and saved:', { name, email, message });
 
-    res.json({ success: true, message: "Thanks for your suggestion! Email sent." });
+    res.json({ success: true, message: "Thanks for your suggestion! Email sent and saved." });
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: "Failed to send email" });
   }
 });
+
 
 app.get('/api/suggestions', (req, res) => {
 res.json(suggestions);
