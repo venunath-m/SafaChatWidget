@@ -456,27 +456,6 @@
         errorMsg.style.display = 'block';
       }
     });
-    document.addEventListener('DOMContentLoaded', () => {
-      async function loadSuggestions() {
-        try {
-          const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
-          const suggestions = await res.json();
-          const list = document.getElementById('suggestion-list');
-          list.innerHTML = '';
-          suggestions.forEach(s => {
-            const li = document.createElement('li');
-            li.textContent = `${s.name} says: "${s.message}"`;
-            list.appendChild(li);
-          });
-        } catch(e) {
-          console.error('Failed to load suggestions', e);
-        }
-      }
-      loadSuggestions();
-      setInterval(loadSuggestions, 30000);
-    });
-
-
     // Query-only form submission (send email only)
     document.getElementById('queryOnlyForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -510,6 +489,23 @@
         errorMsg.style.display = 'block';
       }
     });
+    async function loadSuggestions() {
+    try {
+      const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
+      const suggestions = await res.json();
+      const list = document.getElementById('suggestion-list');
+      list.innerHTML = '';
+      suggestions.forEach(s => {
+        const li = document.createElement('li');
+        li.textContent = `${s.name} says: "${s.message}"`;
+        list.appendChild(li);
+      });
+    } catch(e) {
+      console.error('Failed to load suggestions', e);
+    }
+  }
+  loadSuggestions();
+  setInterval(loadSuggestions, 30000);
 </script>
 </body>
 </html>
