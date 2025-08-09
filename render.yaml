@@ -1,6 +1,6 @@
 services:
   - type: static
-    name: safa-chat-widget
+    name: SafaChatWidget
     env: static
     buildCommand: ""
     staticPublishPath: .
