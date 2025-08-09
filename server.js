@@ -1,14 +1,27 @@
 import express from 'express';
 import path from 'path';
+import fs from 'fs';         // <<-- add this import
 import nodemailer from 'nodemailer';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 const GMAIL_USER = process.env.GMAIL_USER || "venunathm30@gmail.com";
-const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "qgupvyhtqbdhaknx";
+const GMAIL_APP_PASSWORD = process.env.GMAIL_APP_PASSWORD || "qgup vyht qbdh aknx";
 
-const suggestions = []; // in-memory suggestions
+const suggestionsFile = path.join(process.cwd(), 'suggestions.json');
+let suggestions = [];
+
+// Load suggestions on startup (move this above routes)
+if (fs.existsSync(suggestionsFile)) {
+  try {
+    const data = fs.readFileSync(suggestionsFile, 'utf-8');
+    suggestions = JSON.parse(data);
+  } catch(e) {
+    console.error("Error parsing suggestions.json:", e);
+    suggestions = [];
+  }
+}
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -18,10 +31,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-// Use JSON parser middleware first
 app.use(express.json());
 
-// API routes first — so static doesn't intercept API calls
+// API routes
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'index.html'));
 });
@@ -29,7 +41,6 @@ app.get('/', (req, res) => {
 app.get('/api/faqs', (req, res) => {
   res.json([
     { question: "How to get API key?", answer: "Sign up and get from dashboard." },
-    // add more FAQs
   ]);
 });
 
@@ -42,9 +53,16 @@ app.post('/api/save-suggestion', (req, res) => {
   if (!name || !message) {
     return res.status(400).json({ error: "Missing name or message" });
   }
-  suggestions.push({ name, message, date: new Date().toISOString() });
-  console.log('Current suggestions:', suggestions);
-  res.json({ success: true, message: "Suggestion saved successfully." });
+  const newSuggestion = { name, message, date: new Date().toISOString() };
+  suggestions.push(newSuggestion);
+
+  fs.writeFile(suggestionsFile, JSON.stringify(suggestions, null, 2), (err) => {
+    if (err) {
+      console.error('Failed to save suggestion to file', err);
+      return res.status(500).json({ error: 'Failed to save suggestion' });
+    }
+    res.json({ success: true, message: "Suggestion saved successfully." });
+  });
 });
 
 app.post('/api/send-email', async (req, res) => {
@@ -78,10 +96,10 @@ ${message}
   }
 });
 
-// Finally serve static files, including JS, CSS, assets, etc
+// Static files (put after API routes)
 app.use(express.static(path.join(process.cwd())));
 
-// Optional: 404 handler for any unknown route
+// 404 handler
 app.use((req, res) => {
   res.status(404).send('Not Found');
 });
