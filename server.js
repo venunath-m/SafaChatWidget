@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
 });
 
-
+app.get('/api/test', (req, res) => res.json({ status: 'API works' }));
 app.get('/api/faqs', (req, res) => {
   res.json([
     { question: "How to get API key?", answer: "Sign up and get from dashboard." },
