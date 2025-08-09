@@ -43,8 +43,10 @@ app.post('/api/save-suggestion', (req, res) => {
     return res.status(400).json({ error: "Missing name or message" });
   }
   suggestions.push({ name, message, date: new Date().toISOString() });
+  console.log('Current suggestions:', suggestions); // << Add this
   res.json({ success: true, message: "Suggestion saved successfully." });
 });
+
 
 // Send email only (no saving)
 app.post('/api/send-email', async (req, res) => {
@@ -58,25 +60,26 @@ app.post('/api/send-email', async (req, res) => {
     to: "fallenangelnaga@nagasoftsolutions.com",
     subject: `New Suggestion from ${name}`,
     text: `
-You have a new suggestion/query from the website:
+        You have a new suggestion/query from the website:
 
-Name: ${name}
-Email: ${email}
+        Name: ${name}
+        Email: ${email}
 
-Message:
-${message}
-    `,
-  };
+        Message:
+        ${message}
+            `,
+        };
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log('Suggestion email sent:', { name, email, message });
+    const info = await transporter.sendMail(mailOptions);
+    console.log('Suggestion email sent:', info);
     res.json({ success: true, message: "Email sent successfully." });
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).json({ error: "Failed to send email" });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
