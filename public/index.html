@@ -343,8 +343,7 @@
       </section>
       <section id="suggestions">
         <h2>Suggestions from Users</h2>
-        <ul id="suggestion-list">
-          <!-- suggestions will be loaded here -->
+        <ul id="suggestion-list">         
         </ul>
       </section>
 
@@ -489,23 +488,25 @@
         errorMsg.style.display = 'block';
       }
     });
-    async function loadSuggestions() {
-    try {
-      const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
-      const suggestions = await res.json();
-      const list = document.getElementById('suggestion-list');
-      list.innerHTML = '';
-      suggestions.forEach(s => {
-        const li = document.createElement('li');
-        li.textContent = `${s.name} says: "${s.message}"`;
-        list.appendChild(li);
-      });
-    } catch(e) {
-      console.error('Failed to load suggestions', e);
-    }
-  }
-  loadSuggestions();
-  setInterval(loadSuggestions, 30000);
+    document.addEventListener('DOMContentLoaded', () => {
+      async function loadSuggestions() {
+        try {
+          const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
+          const suggestions = await res.json();
+          const list = document.getElementById('suggestion-list');
+          list.innerHTML = '';
+          suggestions.forEach(s => {
+            const li = document.createElement('li');
+            li.textContent = `${s.name} says: "${s.message}"`;
+            list.appendChild(li);
+          });
+        } catch(e) {
+          console.error('Failed to load suggestions', e);
+        }
+      }
+      loadSuggestions();
+      setInterval(loadSuggestions, 30000);
+    });
 </script>
 </body>
 </html>
