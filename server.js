@@ -18,9 +18,10 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.use(express.static(path.join(process.cwd())));
+// Use JSON parser middleware first
 app.use(express.json());
 
+// API routes first — so static doesn't intercept API calls
 app.get('/', (req, res) => {
   res.sendFile(path.join(process.cwd(), 'index.html'));
 });
@@ -36,19 +37,16 @@ app.get('/api/suggestions', (req, res) => {
   res.json(suggestions);
 });
 
-// Save suggestion only (no email)
 app.post('/api/save-suggestion', (req, res) => {
   const { name, message } = req.body;
   if (!name || !message) {
     return res.status(400).json({ error: "Missing name or message" });
   }
   suggestions.push({ name, message, date: new Date().toISOString() });
-  console.log('Current suggestions:', suggestions); // << Add this
+  console.log('Current suggestions:', suggestions);
   res.json({ success: true, message: "Suggestion saved successfully." });
 });
 
-
-// Send email only (no saving)
 app.post('/api/send-email', async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
@@ -60,15 +58,15 @@ app.post('/api/send-email', async (req, res) => {
     to: "fallenangelnaga@nagasoftsolutions.com",
     subject: `New Suggestion from ${name}`,
     text: `
-        You have a new suggestion/query from the website:
+You have a new suggestion/query from the website:
 
-        Name: ${name}
-        Email: ${email}
+Name: ${name}
+Email: ${email}
 
-        Message:
-        ${message}
-            `,
-        };
+Message:
+${message}
+    `,
+  };
 
   try {
     const info = await transporter.sendMail(mailOptions);
@@ -80,6 +78,13 @@ app.post('/api/send-email', async (req, res) => {
   }
 });
 
+// Finally serve static files, including JS, CSS, assets, etc
+app.use(express.static(path.join(process.cwd())));
+
+// Optional: 404 handler for any unknown route
+app.use((req, res) => {
+  res.status(404).send('Not Found');
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
