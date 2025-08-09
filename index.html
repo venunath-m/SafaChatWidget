@@ -421,45 +421,49 @@ setInterval(loadSuggestions, 30000);
     // Handle query & suggestion form submission
     const form = document.getElementById('suggestionForm');
     form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const successMsg = document.getElementById('query-success');
-      const errorMsg = document.getElementById('query-error');
+  e.preventDefault();
+  const successMsg = document.getElementById('query-success');
+  const errorMsg = document.getElementById('query-error');
 
-      successMsg.style.display = 'none';
-      errorMsg.style.display = 'none';
+  successMsg.style.display = 'none';
+  errorMsg.style.display = 'none';
 
-      const formData = {
-        name: form.name.value.trim(),
-        email: form.email.value.trim(),
-        message: form.message.value.trim(),
-      };
+  const formData = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    message: form.message.value.trim(),
+  };
 
-      // Basic validation (already required on inputs, just extra)
-      if(!formData.name || !formData.email || !formData.message) {
-        errorMsg.textContent = 'Please fill out all fields.';
-        errorMsg.style.display = 'block';
-        return;
-      }
+  if (!formData.name || !formData.email || !formData.message) {
+    errorMsg.textContent = 'Please fill out all fields.';
+    errorMsg.style.display = 'block';
+    return;
+  }
 
-      try {
-        // Replace with your real API endpoint for submission
-        const response = await fetch('/api/submit-suggestion', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
-
-        if(response.ok) {
-          successMsg.style.display = 'block';
-          form.reset();
-        } else {
-          throw new Error('Server error');
-        }
-      } catch (error) {
-        errorMsg.textContent = 'Submission failed. Please try again later.';
-        errorMsg.style.display = 'block';
-      }
+  try {
+    // First save suggestion
+    let res = await fetch('/api/save-suggestion', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: formData.name, message: formData.message }),
     });
-  </script>
+    if (!res.ok) throw new Error('Failed to save suggestion');
+
+    // Then send email
+    res = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    if (!res.ok) throw new Error('Failed to send email');
+
+    successMsg.style.display = 'block';
+    form.reset();
+  } catch (error) {
+    errorMsg.textContent = 'Submission failed. Please try again later.';
+    errorMsg.style.display = 'block';
+  }
+});
+</script>
 </body>
 </html>
