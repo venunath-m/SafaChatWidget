@@ -212,7 +212,7 @@
   <script>
   async function loadSuggestions() {
   try {
-    const res = await fetch('/api/suggestions');
+    const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
     const suggestions = await res.json();
     const list = document.getElementById('suggestion-list');
     list.innerHTML = '';
@@ -456,7 +456,7 @@ setInterval(loadSuggestions, 30000);
       }
 
       try {
-        const res = await fetch('/api/save-suggestion', {
+        const res = await fetch('https://safachatwidgetbackend.onrender.com/api/save-suggestion', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, message }),
@@ -490,7 +490,7 @@ setInterval(loadSuggestions, 30000);
       }
 
       try {
-        const res = await fetch('/api/send-email', {
+        const res = await fetch('https://safachatwidgetbackend.onrender.com/api/send-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, email, message }),
