@@ -494,12 +494,17 @@
           const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
           const suggestions = await res.json();
           const list = document.getElementById('suggestion-list');
-          list.innerHTML = '';
-          suggestions.forEach(s => {
-            const li = document.createElement('li');
-            li.textContent = `${s.name} says: "${s.message}"`;
-            list.appendChild(li);
-          });
+            if (!list) {
+              console.error('Suggestion list element not found');
+              return;
+            }
+            list.innerHTML = '';
+
+            suggestions.forEach(s => {
+              const li = document.createElement('li');
+              li.textContent = `${s.name} says: "${s.message}"`;
+              list.appendChild(li);
+            });
         } catch(e) {
           console.error('Failed to load suggestions', e);
         }
