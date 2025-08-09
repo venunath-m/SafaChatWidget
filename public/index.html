@@ -214,6 +214,64 @@
       margin-bottom: 0.5rem;
       font-style: italic;
     }
+    /* Mobile Friendly Responsive Styles */
+    @media (max-width: 600px) {
+      body, html {
+        font-size: 14px;
+      }
+      .container {
+        padding: 1rem 1rem 2rem;
+        max-width: 100%;
+      }
+      header h1 {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+      }
+      header .subtitle {
+        font-size: 1rem;
+        max-width: 100%;
+        padding: 0 0.5rem;
+      }
+      main {
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+      .widget-box {
+        flex-direction: column;
+        padding: 0 0.5rem;
+      }
+      /* Accordion headers and content adjustments */
+      .accordion-header {
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+      .accordion-content.open {
+        max-height: none; /* allow expanding naturally */
+      }
+      /* Form inputs and buttons full width */
+      #query-form input,
+      #query-form textarea,
+      #suggestionOnlyForm input,
+      #suggestionOnlyForm textarea {
+        font-size: 1rem;
+      }
+      #query-form button,
+      #suggestionOnlyForm button {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.75rem;
+      }
+      /* Footer font smaller */
+      footer p {
+        font-size: 0.9rem;
+      }
+      /* Reduce padding/margins on sections */
+      #how-to-use, #faq, #query-form, #suggestion-form, #suggestions {
+        margin: 1.5rem 0;
+        padding: 1rem 1rem;
+      }
+    }
 
   </style>
 
