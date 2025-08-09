@@ -49,7 +49,7 @@ class SafaChatWidget extends HTMLElement {
           50% { box-shadow: 0 0 18px 6px #007bffcc; }
         }
 
-        /* Label near chat button for Baby Safa */
+        /* Label near chat button for Safa */
         #chat-label {
           position: fixed;
           bottom: 90px;
@@ -190,12 +190,12 @@ class SafaChatWidget extends HTMLElement {
       </style>
 
       <button id="chat-button" aria-label="Open Safa Chat">💬</button>
-      <div id="chat-label">Baby Safa</div>
+      <div id="chat-label">Safa</div>
 
       <div id="chat-box" role="region" aria-live="polite" aria-label="Safa Chat Widget">
         <div id="chat-header">
           <img src="https://i.postimg.cc/XYxTzTjn/baby-safa-avatar.png" alt="Baby Safa avatar" />
-          Baby Safa
+          Safa
         </div>
         <div id="messages" aria-atomic="true" aria-relevant="additions"></div>
         <div id="input">
