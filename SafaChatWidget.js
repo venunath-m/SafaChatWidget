@@ -307,11 +307,58 @@ class SafaChatWidget extends HTMLElement {
       document.head.appendChild(script);
     }
 
+    // Helper function to append chat messages
+    const appendMessage = (sender, text) => {
+      const div = document.createElement('div');
+      div.className = sender === 'user' ? 'user-msg' : 'bot-msg';
+      div.textContent = `${sender === 'user' ? 'You' : 'Safa'}: ${text}`;
+      messages.appendChild(div);
+      messages.scrollTop = messages.scrollHeight;
+    };
+
+    // Function to send normal chat message
+    const sendMessage = async (message) => {
+      appendMessage('user', message);
+      typingIndicator.style.display = 'flex';
+
+      try {
+        const res = await fetch("https://safarepo-1.onrender.com/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": this.apiKey,
+          },
+          body: JSON.stringify({ message }),
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          appendMessage('bot', `Error ${res.status}: ${errorText}`);
+          typingIndicator.style.display = 'none';
+          return;
+        }
+
+        const data = await res.json();
+        appendMessage('bot', data.reply);
+      } catch (err) {
+        appendMessage('bot', `Network error: ${err.message}`);
+      } finally {
+        typingIndicator.style.display = 'none';
+      }
+    };
 
     predictBtn.onclick = async () => {
       typingIndicator.style.display = 'flex';
 
       const message = input.value.trim();
+      if (!message) {
+        appendMessage('bot', "Please enter a message before predicting.");
+        typingIndicator.style.display = 'none';
+        return;
+      }
+
+      console.log("Predict message:", message);
+      appendMessage('user', message); // optional: show user message on predict
 
       try {
         const res = await fetch("https://safarepo-1.onrender.com/predict", {
@@ -320,7 +367,7 @@ class SafaChatWidget extends HTMLElement {
             "Content-Type": "application/json",
             "x-api-key": this.apiKey,
           },
-          body: JSON.stringify({ message }),  // <-- sending { message: "..." }
+          body: JSON.stringify({ message }),
         });
 
         if (!res.ok) {
@@ -357,49 +404,9 @@ class SafaChatWidget extends HTMLElement {
       }
     };
 
-
     button.onclick = () => {
       chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
       input.focus();
-    };
-
-    const appendMessage = (sender, text) => {
-      const div = document.createElement('div');
-      div.className = sender === 'user' ? 'user-msg' : 'bot-msg';
-      div.textContent = `${sender === 'user' ? 'You' : 'Safa'}: ${text}`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    };
-
-    const sendMessage = async (message) => {
-      appendMessage('user', message);
-      typingIndicator.style.display = 'flex';
-
-      try {
-        const res = await fetch("https://safarepo-1.onrender.com/chat", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": this.apiKey,
-          },
-          body: JSON.stringify({ message }),
-        });
-
-        if (!res.ok) {
-          const errorText = await res.text();
-          appendMessage('bot', `Error ${res.status}: ${errorText}`);
-          typingIndicator.style.display = 'none';
-          return;
-        }
-
-        const data = await res.json();
-        appendMessage('bot', data.reply);
-
-      } catch (err) {
-        appendMessage('bot', `Network error: ${err.message}`);
-      } finally {
-        typingIndicator.style.display = 'none';
-      }
     };
 
     sendBtn.onclick = () => {
@@ -410,16 +417,15 @@ class SafaChatWidget extends HTMLElement {
     };
 
     input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      const message = input.value.trim();
-      if (!message) return;
-      input.value = '';
-      sendMessage(message);
-    }
-  });
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
+        input.value = '';
+        sendMessage(message);
+      }
+    });
 
-    // Mic button with basic speech recognition
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
@@ -450,6 +456,7 @@ class SafaChatWidget extends HTMLElement {
       micBtn.style.display = 'none';
     }
   }
+
 }
 
 customElements.define('safa-chat-widget', SafaChatWidget);
