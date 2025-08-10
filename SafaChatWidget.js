@@ -217,6 +217,32 @@ class SafaChatWidget extends HTMLElement {
           align-items: center;
           justify-content: center;
         }
+        #typing-indicator lottie-player {
+          width: 40px;
+          height: 40px;
+        }
+        #predict-btn {
+          background: var(--primary-color);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          width: 40px;
+          height: 40px;
+          margin-left: 8px;
+          cursor: pointer;
+          font-size: 18px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background-color 0.3s ease;
+          box-shadow: 0 0 8px #007bffaa;
+        }
+
+        #predict-btn:hover {
+          background-color: #0056b3;
+          box-shadow: 0 0 12px #0056b3cc;
+        }
+ 
       </style>
 
       <button id="chat-button" aria-label="Chat With Safa">💬</button>
@@ -244,6 +270,15 @@ class SafaChatWidget extends HTMLElement {
               <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
             </svg>
           </button>
+          <button id="predict-btn" title="Get prediction" aria-label="Predict">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 17L9 11L13 15L21 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="3" cy="17" r="2" fill="white"/>
+              <circle cx="9" cy="11" r="2" fill="white"/>
+              <circle cx="13" cy="15" r="2" fill="white"/>
+              <circle cx="21" cy="7" r="2" fill="white"/>
+            </svg>
+          </button>
           <div id="typing-indicator" style="display:none;">
             <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_tyqe4oog.json"  
               background="transparent" speed="1" style="width: 40px; height: 40px;" loop autoplay>
@@ -265,6 +300,54 @@ class SafaChatWidget extends HTMLElement {
     const micBtn = this.shadowRoot.querySelector('#mic-btn');
     const messages = this.shadowRoot.querySelector('#messages');
     const typingIndicator = this.shadowRoot.querySelector('#typing-indicator');
+    const predictBtn = this.shadowRoot.querySelector('#predict-btn');
+
+    predictBtn.onclick = async () => {
+      typingIndicator.style.display = 'flex';
+
+      try {
+        const res = await fetch("https://safarepo-1.onrender.com/predict", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": this.apiKey,
+          },
+          body: JSON.stringify({ /* add companyId or userId here if needed */ }),
+        });
+
+        if (!res.ok) {
+          const errorText = await res.text();
+          appendMessage('bot', `Error ${res.status}: ${errorText}`);
+          typingIndicator.style.display = 'none';
+          return;
+        }
+
+        const data = await res.json();
+
+        let message = '';
+
+        if (data.predictions) {
+          const months = data.predictions.futureMonths?.join(', ') || '';
+          const sales = data.predictions.predictedSales?.join(', ') || '';
+          message += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
+        }
+
+        if (data.suggestions) {
+          message += `💡 Suggestions:\n${data.suggestions}`;
+        }
+
+        if (!message) {
+          message = "No prediction or suggestions available.";
+        }
+
+        appendMessage('bot', message);
+
+      } catch (err) {
+        appendMessage('bot', `Prediction error: ${err.message}`);
+      } finally {
+        typingIndicator.style.display = 'none';
+      }
+    };
 
     button.onclick = () => {
       chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
