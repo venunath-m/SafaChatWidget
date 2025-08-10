@@ -357,7 +357,7 @@ class SafaChatWidget extends HTMLElement {
         return;
       }
 
-      console.log("Predict message:", message);
+      input.value = '';
       appendMessage('user', message); // optional: show user message on predict
 
       try {
