@@ -332,23 +332,23 @@ class SafaChatWidget extends HTMLElement {
 
         const data = await res.json();
 
-        let message = '';
+        let botMessage  = '';
 
         if (data.predictions) {
           const months = data.predictions.futureMonths?.join(', ') || '';
           const sales = data.predictions.predictedSales?.join(', ') || '';
-          message += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
+          botMessage  += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
         }
 
         if (data.suggestions) {
-          message += `💡 Suggestions:\n${data.suggestions}`;
+          botMessage  += `💡 Suggestions:\n${data.suggestions}`;
         }
 
-        if (!message) {
-          message = "No prediction or suggestions available.";
+        if (!botMessage ) {
+          botMessage  = "No prediction or suggestions available.";
         }
 
-        appendMessage('bot', message);
+        appendMessage('bot', botMessage );
 
       } catch (err) {
         appendMessage('bot', `Prediction error: ${err.message}`);
