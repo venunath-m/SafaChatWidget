@@ -311,7 +311,7 @@ class SafaChatWidget extends HTMLElement {
     predictBtn.onclick = async () => {
       typingIndicator.style.display = 'flex';
 
-      const message = input.value.trim(); // grab the user input message here
+      const message = input.value.trim();
 
       try {
         const res = await fetch("https://safarepo-1.onrender.com/predict", {
@@ -320,7 +320,7 @@ class SafaChatWidget extends HTMLElement {
             "Content-Type": "application/json",
             "x-api-key": this.apiKey,
           },
-          body: JSON.stringify({ message }), // <-- send user input here
+          body: JSON.stringify({ message }),  // <-- sending { message: "..." }
         });
 
         if (!res.ok) {
@@ -344,11 +344,11 @@ class SafaChatWidget extends HTMLElement {
           botMessage  += `💡 Suggestions:\n${data.suggestions}`;
         }
 
-        if (!botMessage ) {
+        if (!botMessage) {
           botMessage  = "No prediction or suggestions available.";
         }
 
-        appendMessage('bot', botMessage );
+        appendMessage('bot', botMessage);
 
       } catch (err) {
         appendMessage('bot', `Prediction error: ${err.message}`);
@@ -356,6 +356,7 @@ class SafaChatWidget extends HTMLElement {
         typingIndicator.style.display = 'none';
       }
     };
+
 
     button.onclick = () => {
       chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
