@@ -285,9 +285,7 @@ class SafaChatWidget extends HTMLElement {
             </lottie-player>
           </div>
         </div>
-      </div>
-
-      <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+      </div>      
     `;
 
   }
@@ -302,8 +300,18 @@ class SafaChatWidget extends HTMLElement {
     const typingIndicator = this.shadowRoot.querySelector('#typing-indicator');
     const predictBtn = this.shadowRoot.querySelector('#predict-btn');
 
+    if (!document.getElementById('lottie-player-script')) {
+      const script = document.createElement('script');
+      script.id = 'lottie-player-script';
+      script.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
+      document.head.appendChild(script);
+    }
+
+
     predictBtn.onclick = async () => {
       typingIndicator.style.display = 'flex';
+
+      const message = input.value.trim(); // grab the user input message here
 
       try {
         const res = await fetch("https://safarepo-1.onrender.com/predict", {
@@ -312,7 +320,7 @@ class SafaChatWidget extends HTMLElement {
             "Content-Type": "application/json",
             "x-api-key": this.apiKey,
           },
-          body: JSON.stringify({ /* add companyId or userId here if needed */ }),
+          body: JSON.stringify({ message }), // <-- send user input here
         });
 
         if (!res.ok) {
