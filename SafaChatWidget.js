@@ -16,14 +16,18 @@ class SafaChatWidget extends HTMLElement {
       <style>
 
         :host {
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          --primary-gradient: linear-gradient(45deg, #e75480, #b57edc);
-          --primary-color: #d95089; /* a soft romantic pink */
-          --background-color: #fff;
-          --text-color: #333;
-          --border-radius: 14px;
-          --box-shadow: 0 8px 25px rgba(183, 126, 220, 0.3); /* softer shadow */
-          --zindex: 10000;
+          --color1: #fbd3e9;  /* soft blush */
+          --color2: #fcd4b6;  /* warm peach */
+          --color3: #fef6d8;  /* champagne gold */
+          display: block;
+          width: 350px;
+          height: 500px;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+          animation: backgroundShift 8s ease-in-out infinite;
+          background: linear-gradient(135deg, var(--color1), var(--color2), var(--color3));
+          background-size: 400% 400%;
         }
 
         #chat-button {
@@ -56,6 +60,11 @@ class SafaChatWidget extends HTMLElement {
           0%, 100% { box-shadow: 0 0 12px 3px rgba(231, 84, 128, 0.7); }
           50% { box-shadow: 0 0 20px 6px rgba(183, 126, 220, 0.9); }
         }
+        @keyframes backgroundShift {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }  
 
         /* Label near chat button */
         #chat-label {
@@ -314,7 +323,7 @@ class SafaChatWidget extends HTMLElement {
 
       <div id="chat-box" role="region" aria-live="polite" aria-label="Safa Chat Widget">
         <div id="chat-header">
-          <img src="/baby-safa-avatar.png" alt="Baby Safa avatar" />
+          <img src="https://safa-chat-widget.onrender.com/baby-safa-avatar.png" alt="Baby Safa avatar" />
           Safa
         </div>
         <div id="messages" aria-atomic="true" aria-relevant="additions"></div>
