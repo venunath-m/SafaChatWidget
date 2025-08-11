@@ -16,91 +16,68 @@ class SafaChatWidget extends HTMLElement {
       <style>
 
         :host {
-          font-family: Arial, sans-serif;
-          --primary-color: #007bff;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          --primary-gradient: linear-gradient(45deg, #e75480, #b57edc);
+          --primary-color: #d95089; /* a soft romantic pink */
           --background-color: #fff;
-          --text-color: #222;
-          --border-radius: 10px;
-          --box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          --text-color: #333;
+          --border-radius: 14px;
+          --box-shadow: 0 8px 25px rgba(183, 126, 220, 0.3); /* softer shadow */
           --zindex: 10000;
         }
+
         #chat-button {
           position: fixed;
           bottom: 20px;
           right: 20px;
-          background: var(--primary-color);
+          background: var(--primary-gradient);
+          box-shadow: 0 0 12px 3px rgba(231, 84, 128, 0.7);
           color: white;
           border: none;
           border-radius: 50%;
-          width: 60px;
-          height: 60px;
-          font-size: 28px;
+          width: 65px;
+          height: 65px;
+          font-size: 30px;
           cursor: pointer;
           z-index: var(--zindex);
-          box-shadow: var(--box-shadow);
-          display: flex;  /* Make sure it is NOT display:none */
-          align-items: center;
-          justify-content: center;
-          transition: background-color 0.3s ease, box-shadow 0.6s ease-in-out;
-          user-select: none;
-          animation: pulse 3s infinite;
-        }
-
-        #input button {
-          background: var(--primary-color);
-          color: white;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          margin-left: 8px;
-          cursor: pointer;
-          font-size: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background-color 0.3s ease;
-          box-shadow: 0 0 8px #007bffaa;
-        }
-        #input button:hover {
-          background-color: #0056b3;
-          box-shadow: 0 0 12px #0056b3cc;
-        }
-        #send-btn i, #mic-btn i {
-          font-size: 20px;
-          pointer-events: none;
+          transition: box-shadow 0.5s ease, transform 0.3s ease;
+          user-select: none;
+          animation: gentlePulse 4s infinite;
         }
         #chat-button:hover {
-          background-color: #0056b3;
-          box-shadow: 0 0 12px 4px #007bff88;
-        }
-        @keyframes pulse {
-          0%, 100% { box-shadow: 0 0 10px 3px #007bff88; }
-          50% { box-shadow: 0 0 18px 6px #007bffcc; }
+          box-shadow: 0 0 20px 6px rgba(183, 126, 220, 0.9);
+          transform: scale(1.1);
         }
 
-        /* Label near chat button for Safa */
+        @keyframes gentlePulse {
+          0%, 100% { box-shadow: 0 0 12px 3px rgba(231, 84, 128, 0.7); }
+          50% { box-shadow: 0 0 20px 6px rgba(183, 126, 220, 0.9); }
+        }
+
+        /* Label near chat button */
         #chat-label {
           position: fixed;
           bottom: 90px;
-          right: 20px;
-          font-weight: bold;
+          right: 22px;
+          font-weight: 700;
           color: var(--primary-color);
-          text-shadow: 0 0 5px #007bffaa;
+          text-shadow: 0 0 8px #e75480cc;
           user-select: none;
           pointer-events: none;
-          font-size: 14px;
-          letter-spacing: 1.2px;
-          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-          animation: glow 2.5s ease-in-out infinite alternate;
+          font-size: 16px;
+          letter-spacing: 1.3px;
+          animation: romanticGlow 3s ease-in-out infinite alternate;
           z-index: var(--zindex);
         }
-        @keyframes glow {
+        @keyframes romanticGlow {
           from {
-            text-shadow: 0 0 6px #007bffcc, 0 0 12px #007bffcc;
+            text-shadow: 0 0 8px #e75480cc, 0 0 16px #b57edccc;
           }
           to {
-            text-shadow: 0 0 12px #3399ff, 0 0 20px #3399ff;
+            text-shadow: 0 0 16px #b57edccc, 0 0 24px #e75480cc;
           }
         }
 
@@ -108,9 +85,9 @@ class SafaChatWidget extends HTMLElement {
           position: fixed;
           bottom: 90px;
           right: 20px;
-          width: 320px;
+          width: 340px;
           max-width: 90vw;
-          height: 450px;
+          height: 480px;
           background: var(--background-color);
           border-radius: var(--border-radius);
           box-shadow: var(--box-shadow);
@@ -119,89 +96,127 @@ class SafaChatWidget extends HTMLElement {
           z-index: var(--zindex);
           overflow: hidden;
           user-select: text;
+          border: 2px solid transparent;
+          transition: border-color 0.4s ease;
+        }
+        #chat-box.show {
+          border-color: #b57edc88;
         }
 
         #chat-header {
-          background: var(--primary-color);
+          background: var(--primary-gradient);
           color: white;
-          padding: 12px 16px;
+          padding: 14px 18px;
           font-weight: 700;
-          font-size: 18px;
+          font-size: 20px;
           display: flex;
           align-items: center;
-          gap: 12px;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          gap: 14px;
+          box-shadow: 0 2px 12px rgba(183, 126, 220, 0.5);
+          user-select: none;
         }
         #chat-header img {
-          width: 32px;
-          height: 32px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
-          box-shadow: 0 0 8px #3399ffaa;
+          box-shadow: 0 0 12px #b57edccc;
+          border: 2px solid white;
+          transition: box-shadow 0.3s ease;
+        }
+        #chat-header img:hover {
+          box-shadow: 0 0 20px #e75480ff;
         }
 
         #messages {
           flex: 1;
-          padding: 12px;
+          padding: 14px;
           overflow-y: auto;
-          font-size: 14px;
+          font-size: 15px;
           color: var(--text-color);
-          background: #f9f9f9;
+          background: #fef9fc;
+          scrollbar-width: thin;
+          scrollbar-color: #e75480 #f1d9e3;
         }
-
+        #messages::-webkit-scrollbar {
+          width: 8px;
+        }
+        #messages::-webkit-scrollbar-thumb {
+          background: #e75480;
+          border-radius: 4px;
+        }
         #messages div {
-          margin-bottom: 12px;
-          line-height: 1.3;
+          margin-bottom: 14px;
+          line-height: 1.4;
         }
 
         #messages .user-msg {
           text-align: right;
-          font-weight: 600;
+          font-weight: 700;
           color: var(--primary-color);
+          background: #f8d4e0;
+          padding: 6px 12px;
+          border-radius: 14px 14px 0 14px;
+          display: inline-block;
+          max-width: 75%;
+          word-wrap: break-word;
         }
 
         #messages .bot-msg {
           text-align: left;
-          color: #444;
+          color: #6b4a70;
+          background: #e9d9f2;
+          padding: 6px 12px;
+          border-radius: 14px 14px 14px 0;
+          display: inline-block;
+          max-width: 75%;
+          word-wrap: break-word;
         }
 
         #input {
           display: flex;
-          border-top: 1px solid #ddd;
-          padding: 8px;
+          border-top: 1px solid #e8d3e9;
+          padding: 10px;
           background: white;
           align-items: center;
+          max-width: 100%;
+          box-sizing: border-box;
+          gap: 8px;
         }
 
         #input input {
           flex: 1;
-          padding: 10px 14px;
-          border: 1px solid #ccc;
+          padding: 12px 16px;
+          border: 1.8px solid #b57edc;
           border-radius: var(--border-radius);
-          font-size: 14px;
+          font-size: 15px;
           outline-offset: 0;
-          outline-color: var(--primary-color);
+          outline-color: #e75480;
+          min-width: 0;
+          transition: border-color 0.3s ease;
+        }
+        #input input:focus {
+          border-color: #e75480;
+          box-shadow: 0 0 8px #e75480bb;
         }
 
-        #input button {
-          background: var(--primary-color);
+        #input button, #predict-btn {
+          background: var(--primary-gradient);
+          box-shadow: 0 0 10px 3px rgba(231, 84, 128, 0.7);
           color: white;
           border: none;
           border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          margin-left: 8px;
+          width: 42px;
+          height: 42px;
           cursor: pointer;
-          font-size: 18px;
+          font-size: 20px;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background-color 0.3s ease;
-          box-shadow: 0 0 8px #007bffaa;
+          transition: box-shadow 0.4s ease, transform 0.3s ease;
         }
-
-        #input button:hover {
-          background-color: #0056b3;
-          box-shadow: 0 0 12px #0056b3cc;
+        #input button:hover, #predict-btn:hover {
+          box-shadow: 0 0 18px 5px rgba(183, 126, 220, 0.9);
+          transform: scale(1.1);
         }
 
         /* Hide original Send button text, only icon shown */
@@ -210,39 +225,55 @@ class SafaChatWidget extends HTMLElement {
         }
 
         #typing-indicator {
-          margin-left: 10px;
-          width: 40px;
-          height: 40px;
+          margin-left: 12px;
+          width: 42px;
+          height: 42px;
           display: none;
           align-items: center;
           justify-content: center;
         }
         #typing-indicator lottie-player {
-          width: 40px;
-          height: 40px;
-        }
-        #predict-btn {
-          background: var(--primary-color);
-          color: white;
-          border: none;
-          border-radius: 50%;
-          width: 40px;
-          height: 40px;
-          margin-left: 8px;
-          cursor: pointer;
-          font-size: 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: background-color 0.3s ease;
-          box-shadow: 0 0 8px #007bffaa;
+          width: 42px;
+          height: 42px;
         }
 
-        #predict-btn:hover {
-          background-color: #0056b3;
-          box-shadow: 0 0 12px #0056b3cc;
+        /* Mobile responsiveness */
+        @media (max-width: 480px) {
+          #chat-box {
+            width: 90vw;
+            height: 400px;
+            right: 5vw;
+            bottom: 80px;
+          }
+          #chat-button {
+            width: 55px;
+            height: 55px;
+            font-size: 24px;
+          }
+          #chat-label {
+            font-size: 13px;
+            bottom: 75px;
+            right: 18px;
+          }
+          #input button, #predict-btn {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+          }
+          #input input {
+            font-size: 14px;
+            padding: 8px 12px;
+          }
+          #chat-header {
+            font-size: 16px;
+            padding: 10px 14px;
+          }
+          #chat-header img {
+            width: 28px;
+            height: 28px;
+          }
         }
- 
+
       </style>
 
       <button id="chat-button" aria-label="Chat With Safa">💬</button>
@@ -250,7 +281,7 @@ class SafaChatWidget extends HTMLElement {
 
       <div id="chat-box" role="region" aria-live="polite" aria-label="Safa Chat Widget">
         <div id="chat-header">
-          <img src="https://i.postimg.cc/XYxTzTjn/baby-safa-avatar.png" alt="Baby Safa avatar" />
+          <img src="/baby-safa-avatar.png" alt="Baby Safa avatar" />
           Safa
         </div>
         <div id="messages" aria-atomic="true" aria-relevant="additions"></div>
@@ -320,6 +351,8 @@ class SafaChatWidget extends HTMLElement {
     const sendMessage = async (message) => {
       appendMessage('user', message);
       typingIndicator.style.display = 'flex';
+      // Force UI update before continuing
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       try {
         const res = await fetch("https://safarepo-1.onrender.com/chat", {
@@ -349,6 +382,8 @@ class SafaChatWidget extends HTMLElement {
 
     predictBtn.onclick = async () => {
       typingIndicator.style.display = 'flex';
+      // Force UI update before continuing
+      await new Promise(resolve => setTimeout(resolve, 50));
 
       const message = input.value.trim();
       if (!message) {
