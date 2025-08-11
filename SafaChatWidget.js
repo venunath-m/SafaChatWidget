@@ -171,7 +171,40 @@ class SafaChatWidget extends HTMLElement {
           max-width: 75%;
           word-wrap: break-word;
         }
+        .typing-bubble {
+          text-align: left;
+          background: #e9d9f2;
+          padding: 6px 12px;
+          border-radius: 14px 14px 14px 0;
+          display: inline-block;
+          max-width: 75%;
+        }
 
+        .typing-dots {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+
+        .typing-dots span {
+          width: 6px;
+          height: 6px;
+          background: #6b4a70;
+          border-radius: 50%;
+          animation: typingBlink 1.4s infinite ease-in-out;
+        }
+
+        .typing-dots span:nth-child(2) {
+          animation-delay: 0.2s;
+        }
+        .typing-dots span:nth-child(3) {
+          animation-delay: 0.4s;
+        }
+
+        @keyframes typingBlink {
+          0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
+          40% { opacity: 1; transform: translateY(-2px); }
+        }
         #input {
           display: flex;
           border-top: 1px solid #e8d3e9;
@@ -330,7 +363,26 @@ class SafaChatWidget extends HTMLElement {
     const messages = this.shadowRoot.querySelector('#messages');
     const typingIndicator = this.shadowRoot.querySelector('#typing-indicator');
     const predictBtn = this.shadowRoot.querySelector('#predict-btn');
+    let typingBubbleEl = null;
+    const showBotTyping = () => {
+      if (typingBubbleEl) return; // already showing
+      typingBubbleEl = document.createElement('div');
+      typingBubbleEl.className = 'bot-msg typing-bubble';
+      typingBubbleEl.innerHTML = `
+        <div class="typing-dots">
+          <span></span><span></span><span></span>
+        </div>
+      `;
+      messages.appendChild(typingBubbleEl);
+      messages.scrollTop = messages.scrollHeight;
+    };
 
+    const hideBotTyping = () => {
+      if (typingBubbleEl) {
+        typingBubbleEl.remove();
+        typingBubbleEl = null;
+      }
+    };
     if (!document.getElementById('lottie-player-script')) {
       const script = document.createElement('script');
       script.id = 'lottie-player-script';
@@ -350,7 +402,7 @@ class SafaChatWidget extends HTMLElement {
     // Function to send normal chat message
     const sendMessage = async (message) => {
       appendMessage('user', message);
-      typingIndicator.style.display = 'flex';
+      showBotTyping();
       // Force UI update before continuing
       await new Promise(resolve => setTimeout(resolve, 50));
 
@@ -367,7 +419,7 @@ class SafaChatWidget extends HTMLElement {
         if (!res.ok) {
           const errorText = await res.text();
           appendMessage('bot', `Error ${res.status}: ${errorText}`);
-          typingIndicator.style.display = 'none';
+          hideBotTyping();
           return;
         }
 
@@ -376,19 +428,19 @@ class SafaChatWidget extends HTMLElement {
       } catch (err) {
         appendMessage('bot', `Network error: ${err.message}`);
       } finally {
-        typingIndicator.style.display = 'none';
+         hideBotTyping();
       }
     };
 
     predictBtn.onclick = async () => {
-      typingIndicator.style.display = 'flex';
+      showBotTyping();
       // Force UI update before continuing
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const message = input.value.trim();
       if (!message) {
         appendMessage('bot', "Please enter a message before predicting.");
-        typingIndicator.style.display = 'none';
+        hideBotTyping();
         return;
       }
 
@@ -408,7 +460,7 @@ class SafaChatWidget extends HTMLElement {
         if (!res.ok) {
           const errorText = await res.text();
           appendMessage('bot', `Error ${res.status}: ${errorText}`);
-          typingIndicator.style.display = 'none';
+          hideBotTyping();
           return;
         }
 
@@ -435,7 +487,7 @@ class SafaChatWidget extends HTMLElement {
       } catch (err) {
         appendMessage('bot', `Prediction error: ${err.message}`);
       } finally {
-        typingIndicator.style.display = 'none';
+        hideBotTyping();
       }
     };
 
