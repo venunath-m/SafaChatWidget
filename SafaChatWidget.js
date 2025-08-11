@@ -36,7 +36,7 @@ class SafaChatWidget extends HTMLElement {
           right: 20px;
           background: var(--primary-gradient);
           box-shadow: 0 0 12px 3px rgba(231, 84, 128, 0.7);
-          color: white;
+          color: #6b1f4f;
           border: none;
           border-radius: 50%;
           width: 65px;
@@ -72,8 +72,8 @@ class SafaChatWidget extends HTMLElement {
           bottom: 90px;
           right: 22px;
           font-weight: 700;
-          color: var(--primary-color);
-          text-shadow: 0 0 8px #e75480cc;
+          color: #6b1f4f; /* matching plum for label text */
+          text-shadow: 0 0 8px rgba(107, 31, 79, 0.6); /* subtle glow for better readability */
           user-select: none;
           pointer-events: none;
           font-size: 16px;
@@ -244,7 +244,7 @@ class SafaChatWidget extends HTMLElement {
         #input button, #predict-btn {
           background: var(--primary-gradient);
           box-shadow: 0 0 10px 3px rgba(231, 84, 128, 0.7);
-          color: white;
+          color: #6b1f4f;
           border: none;
           border-radius: 50%;
           width: 42px;
