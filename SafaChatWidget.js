@@ -330,28 +330,30 @@ class SafaChatWidget extends HTMLElement {
         <div id="input">
           <input type="text" placeholder="Type your message..." aria-label="Chat message input" />
           <button id="mic-btn" title="Voice input (mic)">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3da9fc" xmlns="http://www.w3.org/2000/svg">
               <path d="M12 14C13.6569 14 15 12.6569 15 11V5C15 3.34315 13.6569 2 12 2C10.3431 2 9 3.34315 9 5V11C9 12.6569 10.3431 14 12 14Z"/>
-              <path d="M19 11C19 14.3137 16.3137 17 13 17H11C7.68629 17 5 14.3137 5 11" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              <line x1="12" y1="19" x2="12" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
-              <line x1="8" y1="22" x2="16" y2="22" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              <path d="M19 11C19 14.3137 16.3137 17 13 17H11C7.68629 17 5 14.3137 5 11" stroke="#3da9fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="12" y1="19" x2="12" y2="22" stroke="#3da9fc" stroke-width="2" stroke-linecap="round"/>
+              <line x1="8" y1="22" x2="16" y2="22" stroke="#3da9fc" stroke-width="2" stroke-linecap="round"/>
             </svg>
           </button>
- 
+
           <button id="send-btn" aria-label="Send message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="#3da9fc" xmlns="http://www.w3.org/2000/svg">
               <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
             </svg>
           </button>
+
           <button id="predict-btn" title="Get prediction" aria-label="Predict">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 17L9 11L13 15L21 7" stroke="white" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="3" cy="17" r="2" fill="white"/>
-              <circle cx="9" cy="11" r="2" fill="white"/>
-              <circle cx="13" cy="15" r="2" fill="white"/>
-              <circle cx="21" cy="7" r="2" fill="white"/>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M3 17L9 11L13 15L21 7" stroke="#3da9fc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="3" cy="17" r="2" fill="#3da9fc"/>
+              <circle cx="9" cy="11" r="2" fill="#3da9fc"/>
+              <circle cx="13" cy="15" r="2" fill="#3da9fc"/>
+              <circle cx="21" cy="7" r="2" fill="#3da9fc"/>
             </svg>
           </button>
+
           <div id="typing-indicator" style="display:none;">
             <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_tyqe4oog.json"  
               background="transparent" speed="1" style="width: 40px; height: 40px;" loop autoplay>
