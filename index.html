@@ -42,10 +42,9 @@
       margin: auto;
     }
     #support-button {
-      position: fixed;
-      top: 20px;
-      bottom: auto;
-      right: 20px;
+      position: static; /* removed fixed positioning */
+      display: inline-block;
+      margin-bottom: 1rem; /* space between button and widget */
       background-color: #ff3860;
       color: white;
       font-weight: bold;
@@ -54,13 +53,13 @@
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.25);
       transition: transform 0.2s, box-shadow 0.2s;
-      z-index: 9999;
     }
 
     #support-button:hover {
-      transform: scale(1.1);
+      transform: scale(1.05);
       box-shadow: 0 6px 16px rgba(0,0,0,0.35);
     }
+
     main {
       background: white;
       padding: 2rem;
@@ -311,6 +310,11 @@
 
     <main>
       <div class="widget-box">
+         <!-- Support Button above widget -->
+        <a href="https://www.paypal.me/nbngb" target="_blank" 
+          id="support-button" aria-label="Support Safa Chat Widget via PayPal">
+          ❤️ Support Me
+        </a>
         <safa-chat-widget api-key="uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5"></safa-chat-widget>
       </div>
 
