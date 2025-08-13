@@ -47,6 +47,11 @@ Full Source Code License	Contact for pricing	One-time purchase, contact for deta
 Note: Prices are indicative and can be customized based on project scope and company size.
 
 Contact & Support
+If you like **Safa Chat Widget** and want to support its development, you can donate any amount via PayPal:
+
+[Donate via PayPal](https://www.paypal.me/nbngb)
+
+Every little contribution helps keep the project running and improving! 🥰
 📧 Email: fallenangelnaga@nagasoftsolutions.com
 
 📱 WhatsApp: https://wa.me/918590216646
