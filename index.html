@@ -69,11 +69,15 @@
       box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
     }
     .widget-box {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
+      margin-top: 0; /* optional */
+      display: inline-flex; /* shrink-wrap around content */
+      justify-content: flex-start; /* align bubbles naturally */
       position: relative;
+      background: transparent; /* remove any background */
+      box-shadow: none; /* remove any shadow */
+      padding: 0; /* remove padding */
     }
+
 
     /* How to Use Section */
     #how-to-use {
@@ -308,15 +312,15 @@
         Test and interact with the <strong>Safa Chat Widget</strong>, featuring API key authentication, voice input, and a typing animation.<br/>
         Use the sections below to learn how to integrate Baby Safa on your site, see FAQs, and submit your queries or suggestions.
       </p>
-    </header>
-
-    <main>
-      <div class="widget-box">
-         <!-- Support Button above widget -->
-        <a href="https://www.paypal.me/nbngb" target="_blank" 
+       <a href="https://www.paypal.me/nbngb" target="_blank" 
           id="support-button" aria-label="Support Safa Chat Widget via PayPal">
           ❤️ Support Me
         </a>
+    </header>
+
+    <main>
+      <div class="widget-box">         <!-- Support Button above widget -->
+       
         <safa-chat-widget api-key="uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5"></safa-chat-widget>
       </div>
 
