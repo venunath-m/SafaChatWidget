@@ -418,7 +418,7 @@ class SafaChatWidget extends HTMLElement {
       await new Promise(resolve => setTimeout(resolve, 50));
 
       try {
-        const res = await fetch("https://safarepo-1.onrender.com/chat", {
+        const res = await fetch("https://safarepo.onrender.com/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -459,7 +459,7 @@ class SafaChatWidget extends HTMLElement {
       appendMessage('user', message); // optional: show user message on predict
 
       try {
-        const res = await fetch("https://safarepo-1.onrender.com/predict", {
+        const res = await fetch("https://safarepo.onrender.com/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
