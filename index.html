@@ -194,8 +194,7 @@
 
 <div class="container">
   <header>
-    <h1>🚀 Safa Chat Widget Dashboard</h1>
-    <p class="subtitle">Professional demo page to test and interact with Safa Chat Widget. Submit queries, suggestions, and view FAQs in a polished interface.</p>
+    <h1>🚀 Safa Chat Widget Dashboard</h1>    
   </header>
 
   <!-- How-to Card -->
@@ -424,6 +423,73 @@
       </section>
      
   </div>
+  <div class="card">
+  <h2>💰 Pricing & Service Offers</h2>
+  <p>🎉 Baby Safa Widget is <strong>completely free</strong> for basic usage! Upgrade only if you want more features, higher usage, or professional support:</p>
+
+  <h3>🟢 Free Tier</h3>
+  <ul>
+    <li>Basic text & voice chat</li>
+    <li>Up to 500 messages/month</li>
+    <li>Standard support via email</li>
+  </ul>
+
+  <h3>🔵 Paid Plans (Monthly)</h3>
+  <table style="width:100%; border-collapse: collapse; margin-top: 1rem;">
+    <thead>
+      <tr style="background:#007bff; color:white;">
+        <th style="padding: 0.75rem; text-align:left;">Plan</th>
+        <th style="padding: 0.75rem; text-align:left;">Price (USD)</th>
+        <th style="padding: 0.75rem; text-align:left;">Features / Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#f1f5f9;">
+        <td style="padding:0.5rem;">Pro</td>
+        <td style="padding:0.5rem;">$10</td>
+        <td style="padding:0.5rem;">Up to 5,000 messages/month, priority email support</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem; background:#f1f5f9;">Premium</td>
+        <td style="padding:0.5rem; background:#f1f5f9;">$30</td>
+        <td style="padding:0.5rem; background:#f1f5f9;">Unlimited messages, priority support, advanced analytics</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>🛠️ Optional Professional Services</h3>
+  <table style="width:100%; border-collapse: collapse; margin-top: 0.5rem;">
+    <thead>
+      <tr style="background:#28a745; color:white;">
+        <th style="padding: 0.75rem; text-align:left;">Service</th>
+        <th style="padding: 0.75rem; text-align:left;">Price Range (USD)</th>
+        <th style="padding: 0.75rem; text-align:left;">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background:#f1f5f9;">
+        <td style="padding:0.5rem;">Custom Backend Setup</td>
+        <td style="padding:0.5rem;">$100 - $500</td>
+        <td style="padding:0.5rem;">Deployment help, backend tweaks</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem; background:#f1f5f9;">UI Customization</td>
+        <td style="padding:0.5rem; background:#f1f5f9;">$50 - $200</td>
+        <td style="padding:0.5rem; background:#f1f5f9;">Custom styles, behaviors, or integrations</td>
+      </tr>
+      <tr>
+        <td style="padding:0.5rem;">Full Source Code License</td>
+        <td style="padding:0.5rem;">Contact</td>
+        <td style="padding:0.5rem;">One-time purchase for advanced users</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:1rem; font-size:0.9rem;">
+    *Note: Free tier is fully functional for basic usage. Paid plans and professional services are optional and based on your project needs.*
+  </p>
+</div>
+
    <div class="widget-box">         <!-- Support Button above widget -->
        
         <safa-chat-widget api-key="uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5"></safa-chat-widget>
@@ -441,23 +507,23 @@
 
 <script>
   // Accordion toggle behavior
-  document.querySelectorAll('.accordion-header').forEach(header => {
+    document.querySelectorAll('.accordion-header').forEach(header => {
     header.addEventListener('click', () => {
       const content = header.nextElementSibling;
-      if(content.classList.contains('open')) {
-        content.classList.remove('open');
-      } else {
-        document.querySelectorAll('.accordion-content.open').forEach(openContent => openContent.classList.remove('open'));
+      const isOpen = content.classList.contains('open');
+      
+      document.querySelectorAll('.accordion-content.open').forEach(c => {
+        c.classList.remove('open');
+        c.previousElementSibling.classList.remove('active');
+      });
+
+      if(!isOpen){
         content.classList.add('open');
-      }
-    });
-    header.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        header.click();
+        header.classList.add('active');
       }
     });
   });
+
 
   // Escape HTML helper
   function escapeHtml(text) {
