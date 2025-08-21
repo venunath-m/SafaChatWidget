@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Safa Chat Widget Dashboard</title>
+<title>Safa Chat Widget Dashboard & Demo</title>
 
-<!-- Google Fonts for professional look -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -38,7 +38,7 @@
     margin: 0 auto;
   }
 
-  /* Card style for sections */
+  /* Card style */
   .card {
     background: #fff;
     border-radius: 12px;
@@ -55,9 +55,6 @@
     margin-top: 0;
     color: #007bff;
     font-size: 1.8rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
   }
   .card h3 {
     margin-bottom: 0.5rem;
@@ -135,7 +132,7 @@
   .form-alert.success { color: green; }
   .form-alert.error { color: red; }
 
-  /* Suggestion list cards */
+  /* Suggestions list */
   #suggestionlist li {
     background: #f1f5f9;
     border-radius: 8px;
@@ -148,6 +145,28 @@
     font-style: italic;
   }
 
+  /* Support Button */
+  #support-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: inline-block;
+    background-color: #ff3860;
+    color: white;
+    font-weight: bold;
+    padding: 12px 18px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    z-index: 9999;
+  }
+  #support-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  }
+
+  /* Footer */
   footer {
     text-align: center;
     padding: 1rem 0;
@@ -156,12 +175,14 @@
     font-weight: 600;
   }
 
-  /* Mobile responsiveness */
+  /* Mobile */
   @media (max-width: 600px) {
     .card h2 { font-size: 1.5rem; }
     header h1 { font-size: 2rem; }
   }
 </style>
+  <script src="/SafaChatWidget.js" defer></script>
+  
 </head>
 <body>
 
@@ -176,6 +197,9 @@
     <h2>📝 How to Use Baby Safa Widget</h2>
     <h3>1. Get Your API Key</h3>
     <p>Sign up and get a unique API key to use the widget.</p>
+    <ul>
+      <li>❤️ <a href="https://www.paypal.me/nbngb" target="_blank" rel="noopener noreferrer">Support Safa Chat Widget via PayPal</a></li>
+    </ul>
     <h3>2. Embed the Widget</h3>
     <pre>&lt;safa-chat-widget api-key="YOUR_API_KEY"&gt;&lt;/safa-chat-widget&gt;</pre>
     <h3>3. Customize FAQs & Data</h3>
@@ -189,7 +213,7 @@
     </ul>
   </div>
 
-  <!-- Suggestions Card -->
+  <!-- Submit Suggestions Card -->
   <div class="card">
     <h2>💡 Submit Your Suggestions</h2>
     <form id="suggestionOnlyForm">
@@ -206,7 +230,7 @@
     <ul id="suggestionlist"></ul>
   </div>
 
-  <!-- FAQs Card -->
+  <!-- FAQ Card -->
   <div class="card">
     <h2>❓ Frequently Asked Questions</h2>
     <div class="accordion-item">
@@ -223,7 +247,18 @@
     </div>
   </div>
 
+  <!-- Chat Widget -->
+  <div class="card">
+    <h2>🤖 Your Safa Chat Widget</h2>
+    <div class="widget-box">
+      <safa-chat-widget api-key="YOUR_API_KEY"></safa-chat-widget>
+    </div>
+  </div>
+
 </div>
+
+<!-- Support Button -->
+<a href="https://www.paypal.me/nbngb" target="_blank" id="support-button" aria-label="Support Safa Chat Widget via PayPal">❤️ Support Me</a>
 
 <footer>
   <p>Made with ❤️ by the Naga Team</p>
@@ -246,42 +281,22 @@
   // Suggestions
   document.getElementById('suggestionOnlyForm').addEventListener('submit', async e=>{
     e.preventDefault();
-    const success = document.getElementById('suggestion-success');
-    const error = document.getElementById('suggestion-error');
-    success.style.display = error.style.display = 'none';
-    const name = e.target.name.value.trim();
-    const message = e.target.message.value.trim();
-    if(!name||!message){ error.textContent='Fill all fields.'; error.style.display='block'; return; }
-    try{
-      const res = await fetch('https://safachatwidgetbackend.onrender.com/api/save-suggestion',{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name,message})
-      });
-      if(!res.ok) throw new Error('Failed');
-      success.style.display='block'; e.target.reset();
-      loadSuggestions(); // refresh list immediately
-    }catch{ error.textContent='Failed to submit. Try again.'; error.style.display='block'; }
+    const name = document.getElementById('suggestion-name').value.trim();
+    const message = document.getElementById('suggestion-message').value.trim();
+    if(!name||!message) return;
+    try {
+      // Here you can POST to your server, for demo we'll append locally
+      const li = document.createElement('li');
+      li.innerHTML = `<strong>${name}</strong>: ${message} <br><small>${new Date().toLocaleString()}</small>`;
+      document.getElementById('suggestionlist').prepend(li);
+      document.getElementById('suggestion-success').style.display='block';
+      setTimeout(()=>document.getElementById('suggestion-success').style.display='none',3000);
+      e.target.reset();
+    } catch(err){
+      document.getElementById('suggestion-error').style.display='block';
+      setTimeout(()=>document.getElementById('suggestion-error').style.display='none',3000);
+    }
   });
-
-  async function loadSuggestions(){
-    try{
-      const res = await fetch('https://safachatwidgetbackend.onrender.com/api/suggestions');
-      if(!res.ok) throw new Error('Failed to fetch');
-      const suggestions = await res.json();
-      const list = document.getElementById('suggestionlist');
-      list.innerHTML = '';
-      suggestions.forEach(s=>{
-        const date = new Date(s.date).toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'});
-        const li = document.createElement('li');
-        li.innerHTML = `<strong>${escapeHtml(s.name)}</strong>: ${escapeHtml(s.message)}<br/><small>${date}</small>`;
-        list.appendChild(li);
-      });
-    }catch(e){ console.error(e); }
-  }
-
-  function escapeHtml(text){ const div=document.createElement('div'); div.textContent=text; return div.innerHTML; }
-
-  window.onload = () => { loadSuggestions(); };
 </script>
 
 </body>
