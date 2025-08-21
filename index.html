@@ -200,11 +200,22 @@
     <ul>
       <li>❤️ <a href="https://www.paypal.me/nbngb" target="_blank" rel="noopener noreferrer">Support Safa Chat Widget via PayPal</a></li>
     </ul>
-    <h3>2. Embed the Widget</h3>
-    <pre>&lt;safa-chat-widget api-key="YOUR_API_KEY"&gt;&lt;/safa-chat-widget&gt;</pre>
-    <h3>3. Customize FAQs & Data</h3>
-    <p>Add training data via your dashboard for accurate responses.</p>
-    <h3>4. Features</h3>
+    <div>
+          <h3>2. Embed the Widget on Your Site</h3>
+          <p>Copy and paste this code snippet into your website's HTML where you want Baby Safa to appear:</p>
+          <pre>
+&lt;safa-chat-widget api-key="YOUR_API_KEY_HERE"&gt;&lt;/safa-chat-widget&gt;
+&lt;script src="https://safachatwidget.onrender.com/SafaChatWidget.js" defer&gt;&lt;/script&gt;
+          </pre>
+        </div>
+
+        <div>
+          <h3>3. Customize FAQs &amp; Business Data</h3>
+          <p>
+            Add FAQs and training data through your dashboard so Baby Safa understands your business and provides accurate assistance to your customers.
+          </p>
+        </div>
+        <h3>4. Features</h3>
     <ul>
       <li>Text & Voice Chat</li>
       <li>Responsive Design</li>
@@ -215,6 +226,55 @@
 
   <!-- Submit Suggestions Card -->
   <div class="card">
+    <div>
+          <h3>Need Help?</h3>
+          <p>
+            Reach out to our support team via <li>📧 <a href="mailto:fallenangelnaga@nagasoftsolutions.com">fallenangelnaga@nagasoftsolutions.com</a></li> or  
+            <li>📱 <a href="https://wa.me/918590216646" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          </p>
+        </div>
+      </section>
+      <!-- AI Chat Friend Section -->
+      <section id="ai-chat-friend" aria-label="Build Your Own AI Chat Friend">
+        <h2>🤖 Build Your Own AI Chat Friend</h2>
+        <p>
+          In this video, we bring to life a personal AI chatbot that feels like you’re chatting with a real friend — powered by Flutter, styled beautifully, and guided by ChatGPT (aka Safa 💙).
+        </p>
+        <p>
+          ✨ Whether you want to build something cool, experiment with AI, or just have some fun, this chatbot project is perfect for you! Chat by text or voice, and hear it respond with natural speech and smooth animations.
+        </p>
+        <h3>🔧 Built with:</h3>
+        <ul>
+          <li>Flutter (Clean and modern UI)</li>
+          <li>Riverpod (State management)</li>
+          <li>OpenAI / ChatGPT models for intelligent responses</li>
+          <li>Voice input (Speech-to-text)</li>
+          <li>Voice output (Text-to-speech)</li>
+          <li>Lottie animations for typing effects</li>
+        </ul>
+        <p>💰 Source code available for a one-time purchase!<br/>
+          💼 Custom services offered: deployment help, backend tweaks, UI customization.
+        </p>
+        <h3>📞 Get in touch:</h3>
+        <ul>
+          <li>🌐 <a href="https://www.nagasoftsolutions.com/" target="_blank" rel="noopener noreferrer">https://www.nagasoftsolutions.com/</a></li>
+          <li>📱 <a href="https://wa.me/918590216646" target="_blank" rel="noopener noreferrer">WhatsApp</a></li>
+          <li>📧 <a href="fallenangelnaga@nagasoftsolutions.com">fallenangelnaga@nagasoftsolutions.com</a></li>
+          <li>📄 <a href="https://venunath.horitio.com/" target="_blank" rel="noopener noreferrer">Resume</a></li>
+          <li>🐙 <a href="https://github.com/venunath-m" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+          <li>🎯 <a href="https://www.fiverr.com/venuathm30" target="_blank" rel="noopener noreferrer">Fiverr</a></li>
+          <li>💼 <a href="https://www.upwork.com/freelancers/~01765c5bf07cadae72" target="_blank" rel="noopener noreferrer">Upwork</a></li>
+          <li>📺 <a href="https://www.youtube.com/@nbngb8112" target="_blank" rel="noopener noreferrer">YouTube</a></li>
+        </ul>
+        <h3>🎯 Title Suggestions</h3>
+        <ul>
+          <li>Build Your Own AI Chatbot with Flutter + ChatGPT Style UI + Voice</li>
+          <li>Create a Flutter AI Chat Friend – Text & Voice Chatbot Powered by ChatGPT</li>
+          <li>Flutter AI Chatbot Tutorial: ChatGPT Style with Voice Input & Output</li>
+          <li>How to Build a ChatGPT-Like AI Chatbot in Flutter (With Voice!)</li>
+          <li>Personal AI Chatbot with Flutter + ChatGPT + Voice — Step by Step</li>
+        </ul>
+      </section>
     <h2>💡 Submit Your Suggestions</h2>
     <form id="suggestionOnlyForm">
       <label for="suggestion-name">Name</label>
@@ -227,6 +287,14 @@
     </form>
 
     <h3>Suggestions from Users</h3>
+    <div>
+          <h3>5. Pro Tips</h3>
+          <ul>
+            <li>Place the widget near the bottom-right corner for best user experience</li>
+            <li>Keep your API key confidential and do not expose it publicly without controls</li>
+            <li>Regularly update your FAQs to keep the chatbot relevant</li>
+          </ul>
+        </div>
     <ul id="suggestionlist"></ul>
   </div>
 
@@ -249,10 +317,33 @@
 
   <!-- Chat Widget -->
   <div class="card">
-    <h2>🤖 Your Safa Chat Widget</h2>
-    <div class="widget-box">
-      <safa-chat-widget api-key="YOUR_API_KEY"></safa-chat-widget>
-    </div>
+     <section id="query-form" aria-label="Submit Queries">
+        <h2>Submit Your Queries</h2>
+        <form id="queryOnlyForm">
+          <label for="query-name">Your Name</label>
+          <input type="text" id="query-name" name="name" placeholder="Enter your name" required />
+
+          <label for="query-email">Email Address</label>
+          <input type="email" id="query-email" name="email" placeholder="Enter your email" required />
+
+          <label for="query-message">Your Query</label>
+          <textarea id="query-message" name="message" rows="4" placeholder="Write your query here..." required></textarea>
+
+          <button type="submit">Submit Query</button>
+
+          <div id="query-success" role="alert" aria-live="polite" style="display:none; color:green;">
+            Thank you for your query submission!
+          </div>
+          <div id="query-error" role="alert" aria-live="assertive" style="display:none; color:red;">
+            Failed to submit query. Please try again.
+          </div>
+        </form>
+      </section>
+      <div class="widget-box">         <!-- Support Button above widget -->
+       
+        <safa-chat-widget api-key="uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5"></safa-chat-widget>
+      </div>
+
   </div>
 
 </div>
