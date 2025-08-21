@@ -1,6 +1,8 @@
 class SafaChatWidget extends HTMLElement {
   constructor() {
     super();
+
+    // Font Awesome (optional/safe to keep)
     if (!document.getElementById('fontawesome-css')) {
       const link = document.createElement('link');
       link.id = 'fontawesome-css';
@@ -8,28 +10,35 @@ class SafaChatWidget extends HTMLElement {
       link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
       document.head.appendChild(link);
     }
+
     this.attachShadow({ mode: 'open' });
 
     this.apiKey = this.getAttribute('api-key') || 'uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5';
 
     this.shadowRoot.innerHTML = `
       <style>
-
+        /* Make the host invisible and non-blocking so no rectangle leaks onto pages */
         :host {
-          --color1: #fbd3e9;  /* soft blush */
-          --color2: #fcd4b6;  /* warm peach */
-          --color3: #fef6d8;  /* champagne gold */
-          display: block;
-          width: 350px;
-          height: 500px;
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-          animation: backgroundShift 8s ease-in-out infinite;
-          background: linear-gradient(135deg, var(--color1), var(--color2), var(--color3));
-          background-size: 400% 400%;
+          all: initial;
+          /* Custom props + sensible defaults */
+          --color1: #fbd3e9;      /* soft blush */
+          --color2: #fcd4b6;      /* warm peach */
+          --color3: #fef6d8;      /* champagne gold */
+          --primary-gradient: linear-gradient(135deg, #e75480 0%, #b57edc 100%);
+          --border-radius: 20px;
+          --box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+          --zindex: 2147483000;
+          --text-color: #3a2e3f;
+          --primary-color: #6b1f4f;
+          --background-color: linear-gradient(135deg, var(--color1), var(--color2), var(--color3));
+          pointer-events: none; /* host itself ignores clicks */
+          font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
         }
 
+        /* Interactive children accept clicks */
+        #chat-button, #chat-box, #chat-label { pointer-events: auto; }
+
+        /* Bubble */
         #chat-button {
           position: fixed;
           bottom: 20px;
@@ -72,8 +81,8 @@ class SafaChatWidget extends HTMLElement {
           bottom: 90px;
           right: 22px;
           font-weight: 700;
-          color: #6b1f4f; /* matching plum for label text */
-          text-shadow: 0 0 8px rgba(107, 31, 79, 0.6); /* subtle glow for better readability */
+          color: #6b1f4f;
+          text-shadow: 0 0 8px rgba(107, 31, 79, 0.6);
           user-select: none;
           pointer-events: none;
           font-size: 16px;
@@ -82,14 +91,11 @@ class SafaChatWidget extends HTMLElement {
           z-index: var(--zindex);
         }
         @keyframes romanticGlow {
-          from {
-            text-shadow: 0 0 8px #e75480cc, 0 0 16px #b57edccc;
-          }
-          to {
-            text-shadow: 0 0 16px #b57edccc, 0 0 24px #e75480cc;
-          }
+          from { text-shadow: 0 0 8px #e75480cc, 0 0 16px #b57edccc; }
+          to   { text-shadow: 0 0 16px #b57edccc, 0 0 24px #e75480cc; }
         }
 
+        /* Chat box — hidden by default; gradient lives here (NOT on :host) */
         #chat-box {
           position: fixed;
           bottom: 90px;
@@ -107,10 +113,9 @@ class SafaChatWidget extends HTMLElement {
           user-select: text;
           border: 2px solid transparent;
           transition: border-color 0.4s ease;
+          animation: backgroundShift 8s ease-in-out infinite;
         }
-        #chat-box.show {
-          border-color: #b57edc88;
-        }
+        #chat-box.show { border-color: #b57edc88; }
 
         #chat-header {
           background: var(--primary-gradient);
@@ -132,9 +137,7 @@ class SafaChatWidget extends HTMLElement {
           border: 2px solid white;
           transition: box-shadow 0.3s ease;
         }
-        #chat-header img:hover {
-          box-shadow: 0 0 20px #e75480ff;
-        }
+        #chat-header img:hover { box-shadow: 0 0 20px #e75480ff; }
 
         #messages {
           flex: 1;
@@ -146,17 +149,9 @@ class SafaChatWidget extends HTMLElement {
           scrollbar-width: thin;
           scrollbar-color: #e75480 #f1d9e3;
         }
-        #messages::-webkit-scrollbar {
-          width: 8px;
-        }
-        #messages::-webkit-scrollbar-thumb {
-          background: #e75480;
-          border-radius: 4px;
-        }
-        #messages div {
-          margin-bottom: 14px;
-          line-height: 1.4;
-        }
+        #messages::-webkit-scrollbar { width: 8px; }
+        #messages::-webkit-scrollbar-thumb { background: #e75480; border-radius: 4px; }
+        #messages div { margin-bottom: 14px; line-height: 1.4; }
 
         #messages .user-msg {
           text-align: right;
@@ -169,7 +164,6 @@ class SafaChatWidget extends HTMLElement {
           max-width: 75%;
           word-wrap: break-word;
         }
-
         #messages .bot-msg {
           text-align: left;
           color: #6b4a70;
@@ -188,32 +182,18 @@ class SafaChatWidget extends HTMLElement {
           display: inline-block;
           max-width: 75%;
         }
-
-        .typing-dots {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-
+        .typing-dots { display: flex; align-items: center; gap: 4px; }
         .typing-dots span {
-          width: 6px;
-          height: 6px;
-          background: #6b4a70;
-          border-radius: 50%;
+          width: 6px; height: 6px; background: #6b4a70; border-radius: 50%;
           animation: typingBlink 1.4s infinite ease-in-out;
         }
-
-        .typing-dots span:nth-child(2) {
-          animation-delay: 0.2s;
-        }
-        .typing-dots span:nth-child(3) {
-          animation-delay: 0.4s;
-        }
-
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
         @keyframes typingBlink {
           0%, 80%, 100% { opacity: 0.3; transform: translateY(0); }
           40% { opacity: 1; transform: translateY(-2px); }
         }
+
         #input {
           display: flex;
           border-top: 1px solid #e8d3e9;
@@ -224,7 +204,6 @@ class SafaChatWidget extends HTMLElement {
           box-sizing: border-box;
           gap: 8px;
         }
-
         #input input {
           flex: 1;
           padding: 12px 16px;
@@ -236,10 +215,7 @@ class SafaChatWidget extends HTMLElement {
           min-width: 0;
           transition: border-color 0.3s ease;
         }
-        #input input:focus {
-          border-color: #e75480;
-          box-shadow: 0 0 8px #e75480bb;
-        }
+        #input input:focus { border-color: #e75480; box-shadow: 0 0 8px #e75480bb; }
 
         #input button, #predict-btn {
           background: var(--primary-gradient);
@@ -256,66 +232,27 @@ class SafaChatWidget extends HTMLElement {
           justify-content: center;
           transition: box-shadow 0.4s ease, transform 0.3s ease;
         }
-        #input button:hover, #predict-btn:hover {
-          box-shadow: 0 0 18px 5px rgba(183, 126, 220, 0.9);
-          transform: scale(1.1);
-        }
-
-        /* Hide original Send button text, only icon shown */
-        #send-btn i {
-          pointer-events: none;
-        }
+        #input button:hover, #predict-btn:hover { box-shadow: 0 0 18px 5px rgba(183, 126, 220, 0.9); transform: scale(1.1); }
+        #send-btn i { pointer-events: none; }
 
         #typing-indicator {
           margin-left: 12px;
-          width: 42px;
-          height: 42px;
+          width: 42px; height: 42px;
           display: none;
-          align-items: center;
-          justify-content: center;
+          align-items: center; justify-content: center;
         }
-        #typing-indicator lottie-player {
-          width: 42px;
-          height: 42px;
-        }
+        #typing-indicator lottie-player { width: 42px; height: 42px; }
 
-        /* Mobile responsiveness */
+        /* Mobile */
         @media (max-width: 480px) {
-          #chat-box {
-            width: 90vw;
-            height: 400px;
-            right: 5vw;
-            bottom: 80px;
-          }
-          #chat-button {
-            width: 55px;
-            height: 55px;
-            font-size: 24px;
-          }
-          #chat-label {
-            font-size: 13px;
-            bottom: 75px;
-            right: 18px;
-          }
-          #input button, #predict-btn {
-            width: 36px;
-            height: 36px;
-            font-size: 16px;
-          }
-          #input input {
-            font-size: 14px;
-            padding: 8px 12px;
-          }
-          #chat-header {
-            font-size: 16px;
-            padding: 10px 14px;
-          }
-          #chat-header img {
-            width: 28px;
-            height: 28px;
-          }
+          #chat-box { width: 90vw; height: 400px; right: 5vw; bottom: 80px; }
+          #chat-button { width: 55px; height: 55px; font-size: 24px; }
+          #chat-label { font-size: 13px; bottom: 75px; right: 18px; }
+          #input button, #predict-btn { width: 36px; height: 36px; font-size: 16px; }
+          #input input { font-size: 14px; padding: 8px 12px; }
+          #chat-header { font-size: 16px; padding: 10px 14px; }
+          #chat-header img { width: 28px; height: 28px; }
         }
-
       </style>
 
       <button id="chat-button" aria-label="Chat With Safa">💬</button>
@@ -355,12 +292,12 @@ class SafaChatWidget extends HTMLElement {
           </button>
 
           <div id="typing-indicator" style="display:none;">
-            <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_tyqe4oog.json"  
+            <lottie-player src="https://assets4.lottiefiles.com/packages/lf20_tyqe4oog.json"
               background="transparent" speed="1" style="width: 40px; height: 40px;" loop autoplay>
             </lottie-player>
           </div>
         </div>
-      </div>      
+      </div>
     `;
 
   }
@@ -375,8 +312,9 @@ class SafaChatWidget extends HTMLElement {
     const typingIndicator = this.shadowRoot.querySelector('#typing-indicator');
     const predictBtn = this.shadowRoot.querySelector('#predict-btn');
     let typingBubbleEl = null;
+
     const showBotTyping = () => {
-      if (typingBubbleEl) return; // already showing
+      if (typingBubbleEl) return;
       typingBubbleEl = document.createElement('div');
       typingBubbleEl.className = 'bot-msg typing-bubble';
       typingBubbleEl.innerHTML = `
@@ -394,6 +332,8 @@ class SafaChatWidget extends HTMLElement {
         typingBubbleEl = null;
       }
     };
+
+    // Lottie (once)
     if (!document.getElementById('lottie-player-script')) {
       const script = document.createElement('script');
       script.id = 'lottie-player-script';
@@ -401,7 +341,7 @@ class SafaChatWidget extends HTMLElement {
       document.head.appendChild(script);
     }
 
-    // Helper function to append chat messages
+    // Append chat message
     const appendMessage = (sender, text) => {
       const div = document.createElement('div');
       div.className = sender === 'user' ? 'user-msg' : 'bot-msg';
@@ -410,11 +350,10 @@ class SafaChatWidget extends HTMLElement {
       messages.scrollTop = messages.scrollHeight;
     };
 
-    // Function to send normal chat message
+    // Send normal chat
     const sendMessage = async (message) => {
       appendMessage('user', message);
       showBotTyping();
-      // Force UI update before continuing
       await new Promise(resolve => setTimeout(resolve, 50));
 
       try {
@@ -439,13 +378,13 @@ class SafaChatWidget extends HTMLElement {
       } catch (err) {
         appendMessage('bot', `Network error: ${err.message}`);
       } finally {
-         hideBotTyping();
+        hideBotTyping();
       }
     };
 
+    // Predict
     predictBtn.onclick = async () => {
       showBotTyping();
-      // Force UI update before continuing
       await new Promise(resolve => setTimeout(resolve, 50));
 
       const message = input.value.trim();
@@ -456,7 +395,7 @@ class SafaChatWidget extends HTMLElement {
       }
 
       input.value = '';
-      appendMessage('user', message); // optional: show user message on predict
+      appendMessage('user', message);
 
       try {
         const res = await fetch("https://safarepo.onrender.com/predict", {
@@ -477,24 +416,18 @@ class SafaChatWidget extends HTMLElement {
 
         const data = await res.json();
 
-        let botMessage  = '';
-
+        let botMessage = '';
         if (data.predictions) {
           const months = data.predictions.futureMonths?.join(', ') || '';
           const sales = data.predictions.predictedSales?.join(', ') || '';
-          botMessage  += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
+          botMessage += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
         }
-
         if (data.suggestions) {
-          botMessage  += `💡 Suggestions:\n${data.suggestions}`;
+          botMessage += `💡 Suggestions:\n${data.suggestions}`;
         }
-
-        if (!botMessage) {
-          botMessage  = "No prediction or suggestions available.";
-        }
+        if (!botMessage) botMessage = "No prediction or suggestions available.";
 
         appendMessage('bot', botMessage);
-
       } catch (err) {
         appendMessage('bot', `Prediction error: ${err.message}`);
       } finally {
@@ -502,11 +435,13 @@ class SafaChatWidget extends HTMLElement {
       }
     };
 
+    // Toggle open/close
     button.onclick = () => {
       chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
       input.focus();
     };
 
+    // Send via button
     sendBtn.onclick = () => {
       const message = input.value.trim();
       if (!message) return;
@@ -514,6 +449,7 @@ class SafaChatWidget extends HTMLElement {
       sendMessage(message);
     };
 
+    // Send via Enter
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         e.preventDefault();
@@ -524,6 +460,7 @@ class SafaChatWidget extends HTMLElement {
       }
     });
 
+    // Voice (if available)
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
@@ -535,27 +472,18 @@ class SafaChatWidget extends HTMLElement {
         micBtn.disabled = true;
         recognition.start();
       };
-
       recognition.onresult = (event) => {
         const speechResult = event.results[0][0].transcript;
         input.value = speechResult;
         micBtn.disabled = false;
         sendBtn.click();
       };
-
-      recognition.onerror = () => {
-        micBtn.disabled = false;
-      };
-
-      recognition.onend = () => {
-        micBtn.disabled = false;
-      };
+      recognition.onerror = () => { micBtn.disabled = false; };
+      recognition.onend = () => { micBtn.disabled = false; };
     } else {
       micBtn.style.display = 'none';
     }
   }
-
 }
 
 customElements.define('safa-chat-widget', SafaChatWidget);
-
