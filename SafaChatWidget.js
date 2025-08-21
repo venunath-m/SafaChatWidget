@@ -260,7 +260,7 @@ class SafaChatWidget extends HTMLElement {
 
       <div id="chat-box" role="region" aria-live="polite" aria-label="Safa Chat Widget">
         <div id="chat-header">
-          <img src="https://safa-chat-widget.onrender.com/baby-safa-avatar.png" alt="Baby Safa avatar" />
+          <img src="https://safachatwidget.onrender.com/baby-safa-avatar.png" alt="Baby Safa avatar" />
           Safa
         </div>
         <div id="messages" aria-atomic="true" aria-relevant="additions"></div>
@@ -357,7 +357,7 @@ class SafaChatWidget extends HTMLElement {
       await new Promise(resolve => setTimeout(resolve, 50));
 
       try {
-        const res = await fetch("https://safarepo.onrender.com/chat", {
+        const res = await fetch("https://safarepo-mcto.onrender.com/chat", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -398,7 +398,7 @@ class SafaChatWidget extends HTMLElement {
       appendMessage('user', message);
 
       try {
-        const res = await fetch("https://safarepo.onrender.com/predict", {
+        const res = await fetch("https://safarepo-mcto.onrender.com/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
