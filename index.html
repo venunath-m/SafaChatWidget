@@ -82,18 +82,22 @@
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease, padding 0.3s ease;
-    padding: 0 1.5rem;
-  }
-  .accordion-header::after {
-  content: '▶';
-  transition: transform 0.3s ease;
-  }
-  .accordion-content.open + .accordion-header::after {
-    transform: rotate(90deg);
   }
   .accordion-content.open {
+    max-height: 500px; /* large enough for content */
+    padding: 1rem 1.5rem;
     background: #eef4ff;
   }
+
+  .accordion-header::after {
+    content: '▶';
+    transition: transform 0.3s ease;
+  }
+
+  .accordion-header.active::after {
+    transform: rotate(90deg);
+  }
+
 
   /* Forms */
   form label {
@@ -507,22 +511,38 @@
 
 <script>
   // Accordion toggle behavior
-    document.querySelectorAll('.accordion-header').forEach(header => {
-    header.addEventListener('click', () => {
-      const content = header.nextElementSibling;
-      const isOpen = content.classList.contains('open');
-      
-      document.querySelectorAll('.accordion-content.open').forEach(c => {
-        c.classList.remove('open');
-        c.previousElementSibling.classList.remove('active');
-      });
+    document.querySelectorAll('.accordion-item').forEach(item => {
+      const header = item.querySelector('.accordion-header');
+      const content = item.querySelector('.accordion-content');
 
-      if(!isOpen){
-        content.classList.add('open');
-        header.classList.add('active');
+      function toggleAccordion() {
+        const isOpen = content.classList.contains('open');
+
+        // Close all other accordions
+        document.querySelectorAll('.accordion-content.open').forEach(c => {
+          c.classList.remove('open');
+          c.previousElementSibling.classList.remove('active'); // header
+        });
+
+        if (!isOpen) {
+          content.classList.add('open');
+          header.classList.add('active');
+        } else {
+          content.classList.remove('open');
+          header.classList.remove('active');
+        }
       }
+
+      header.addEventListener('click', toggleAccordion);
+      header.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          toggleAccordion();
+        }
+      });
     });
-  });
+
+
 
 
   // Escape HTML helper
