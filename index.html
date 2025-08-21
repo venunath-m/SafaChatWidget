@@ -194,35 +194,109 @@
 
   <!-- How-to Card -->
   <div class="card">
-    <h2>📝 How to Use Baby Safa Widget</h2>
-    <h3>1. Get Your API Key</h3>
-    <p>Sign up and get a unique API key to use the widget.</p>
+    <h2>📝 How to Use Baby Safa Widget</h2>    
+    <div>
+          <h3>1. Get Your API Key</h3>
+          <p>
+            Sign up on our platform to receive a unique API key that authenticates your widget usage.<br/>
+            <a href="https://chatbot-app-bice.vercel.app/" style="color: #007bff; text-decoration: underline;">Go to Signup &amp; API Key Request</a>
+          <!-- PayPal Support Button -->
+           <ul>           
+            <li>❤️ <a href="https://www.paypal.me/nbngb" target="_blank" rel="noopener noreferrer" class="support-link">Support Safa Chat Widget via PayPal ❤️</a></li>
+           </ul>
+            <a href="https://www.paypal.me/nbngb" target="_blank" id="support-button" aria-label="Support Safa Chat Widget via PayPal">
+              ❤️ Support Me
+            </a>
+
+          </p>
+        </div>
     <ul>
       <li>❤️ <a href="https://www.paypal.me/nbngb" target="_blank" rel="noopener noreferrer">Support Safa Chat Widget via PayPal</a></li>
     </ul>
-    <div>
-          <h3>2. Embed the Widget on Your Site</h3>
-          <p>Copy and paste this code snippet into your website's HTML where you want Baby Safa to appear:</p>
-          <pre>
+  </div>  
+  <div class="card" style="position: relative; padding-top: 2rem;">
+  <h3>2. Embed the Widget on Your Site</h3>
+  <p>Copy and paste this code snippet into your website's HTML where you want Baby Safa to appear:</p>
+
+  <!-- Copy Button -->
+  <button id="copy-button" style="
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      padding: 0.4rem 0.8rem;
+      border: none;
+      border-radius: 6px;
+      background-color: #007bff;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+  ">Copy</button>
+
+  <!-- Code Block -->
+  <pre id="code-block" style="
+      background: #f1f5f9;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+  ">
 &lt;safa-chat-widget api-key="YOUR_API_KEY_HERE"&gt;&lt;/safa-chat-widget&gt;
 &lt;script src="https://safachatwidget.onrender.com/SafaChatWidget.js" defer&gt;&lt;/script&gt;
-          </pre>
-        </div>
+  </pre>
 
-        <div>
-          <h3>3. Customize FAQs &amp; Business Data</h3>
-          <p>
-            Add FAQs and training data through your dashboard so Baby Safa understands your business and provides accurate assistance to your customers.
-          </p>
-        </div>
-        <h3>4. Features</h3>
-    <ul>
-      <li>Text & Voice Chat</li>
-      <li>Responsive Design</li>
-      <li>Secure API Key Authentication</li>
-      <li>Customizable Styles</li>
-    </ul>
+  <div>
+    <h3>3. Customize FAQs &amp; Business Data</h3>
+    <p>
+      Add FAQs and training data through your dashboard so Baby Safa understands your business and provides accurate assistance to your customers.
+    </p>
   </div>
+
+  <h3>4. Features</h3>
+  <ul>
+    <li>Text & Voice Chat</li>
+    <li>Responsive Design</li>
+    <li>Secure API Key Authentication</li>
+    <li>Customizable Styles</li>
+  </ul>
+</div>
+
+<script>
+  const copyButton = document.getElementById('copy-button');
+  const codeBlock = document.getElementById('code-block');
+
+  copyButton.addEventListener('click', () => {
+    // Create a temporary textarea to copy content
+    const textarea = document.createElement('textarea');
+    textarea.value = codeBlock.textContent.trim();
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+
+    // Optional: feedback to user
+    copyButton.textContent = 'Copied!';
+    setTimeout(() => copyButton.textContent = 'Copy', 1500);
+  });
+</script>
+
+<style>
+  /* Mobile adjustments */
+  @media (max-width: 600px) {
+    #copy-button {
+      top: 0.5rem;
+      right: 0.5rem;
+      padding: 0.3rem 0.6rem;
+      font-size: 0.8rem;
+    }
+    pre {
+      font-size: 0.85rem;
+    }
+  }
+</style>
+
 
   <!-- Submit Suggestions Card -->
   <div class="card">
@@ -255,6 +329,9 @@
         <p>💰 Source code available for a one-time purchase!<br/>
           💼 Custom services offered: deployment help, backend tweaks, UI customization.
         </p>
+    
+  </div>
+<div class="card">
         <h3>📞 Get in touch:</h3>
         <ul>
           <li>🌐 <a href="https://www.nagasoftsolutions.com/" target="_blank" rel="noopener noreferrer">https://www.nagasoftsolutions.com/</a></li>
@@ -285,7 +362,8 @@
       <div id="suggestion-success" class="form-alert success" style="display:none;">Thank you for your suggestion!</div>
       <div id="suggestion-error" class="form-alert error" style="display:none;">Failed to submit. Try again.</div>
     </form>
-
+   </div>
+   <div class="card">    
     <h3>Suggestions from Users</h3>
     <div>
           <h3>5. Pro Tips</h3>
@@ -296,8 +374,7 @@
           </ul>
         </div>
     <ul id="suggestionlist"></ul>
-  </div>
-
+    </div>
   <!-- FAQ Card -->
   <div class="card">
     <h2>❓ Frequently Asked Questions</h2>
@@ -357,38 +434,133 @@
 </footer>
 
 <script>
-  // Accordion
+  // Accordion toggle behavior
   document.querySelectorAll('.accordion-header').forEach(header => {
     header.addEventListener('click', () => {
       const content = header.nextElementSibling;
-      if(content.classList.contains('open')) content.classList.remove('open');
-      else {
-        document.querySelectorAll('.accordion-content.open').forEach(c => c.classList.remove('open'));
+      if(content.classList.contains('open')) {
+        content.classList.remove('open');
+      } else {
+        document.querySelectorAll('.accordion-content.open').forEach(openContent => openContent.classList.remove('open'));
         content.classList.add('open');
       }
     });
-    header.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' ') { e.preventDefault(); header.click(); } });
+    header.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        header.click();
+      }
+    });
   });
 
-  // Suggestions
-  document.getElementById('suggestionOnlyForm').addEventListener('submit', async e=>{
+  // Escape HTML helper
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  // Append suggestion locally
+  function appendSuggestionLocally(name, message, date = new Date()) {
+    const list = document.getElementById('suggestionlist');
+    if (!list) return;
+
+    const li = document.createElement('li');
+    const formattedDate = new Date(date).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+    li.innerHTML = `<strong>${escapeHtml(name)}</strong> says:<br/>"${escapeHtml(message)}"<br/><small><em>${formattedDate}</em></small>`;
+    list.prepend(li); // prepend to show newest first
+  }
+
+  // Handle suggestion form submission
+  document.getElementById('suggestionOnlyForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('suggestion-name').value.trim();
-    const message = document.getElementById('suggestion-message').value.trim();
-    if(!name||!message) return;
+    const successMsg = document.getElementById('suggestion-success');
+    const errorMsg = document.getElementById('suggestion-error');
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+
+    const name = e.target.name.value.trim();
+    const message = e.target.message.value.trim();
+    if (!name || !message) {
+      errorMsg.textContent = 'Please fill out all fields.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    // Append immediately for instant feedback
+    appendSuggestionLocally(name, message);
+
     try {
-      // Here you can POST to your server, for demo we'll append locally
-      const li = document.createElement('li');
-      li.innerHTML = `<strong>${name}</strong>: ${message} <br><small>${new Date().toLocaleString()}</small>`;
-      document.getElementById('suggestionlist').prepend(li);
-      document.getElementById('suggestion-success').style.display='block';
-      setTimeout(()=>document.getElementById('suggestion-success').style.display='none',3000);
+      const res = await fetch('https://safachatwidgetbackend-g5wh.onrender.com/api/save-suggestion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, message }),
+      });
+      if (!res.ok) throw new Error('Failed to save suggestion');
+
+      successMsg.style.display = 'block';
       e.target.reset();
-    } catch(err){
-      document.getElementById('suggestion-error').style.display='block';
-      setTimeout(()=>document.getElementById('suggestion-error').style.display='none',3000);
+    } catch {
+      errorMsg.textContent = 'Failed to submit suggestion. Please try again.';
+      errorMsg.style.display = 'block';
     }
   });
+
+  // Handle query-only form submission (email)
+  document.getElementById('queryOnlyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const successMsg = document.getElementById('query-success');
+    const errorMsg = document.getElementById('query-error');
+    successMsg.style.display = 'none';
+    errorMsg.style.display = 'none';
+
+    const name = e.target.name.value.trim();
+    const email = e.target.email.value.trim();
+    const message = e.target.message.value.trim();
+
+    if (!name || !email || !message) {
+      errorMsg.textContent = 'Please fill out all fields.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    try {
+      const res = await fetch('https://safachatwidgetbackend-g5wh.onrender.com/api/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message }),
+      });
+      if (!res.ok) throw new Error('Failed to send email');
+
+      successMsg.style.display = 'block';
+      e.target.reset();
+    } catch {
+      errorMsg.textContent = 'Failed to submit query. Please try again.';
+      errorMsg.style.display = 'block';
+    }
+  });
+
+  // Load suggestions from server
+  async function loadSuggestions() {
+    try {
+      const res = await fetch('https://safachatwidgetbackend-g5wh.onrender.com/api/suggestions');
+      if (!res.ok) throw new Error('Network response was not ok');
+      const suggestions = await res.json();
+
+      const list = document.getElementById('suggestionlist');
+      if (!list) return;
+      list.innerHTML = '';
+
+      suggestions.forEach(s => appendSuggestionLocally(s.name, s.message, s.date));
+    } catch (e) {
+      console.error('Failed to load suggestions', e);
+    }
+  }
+
+  window.onload = () => {
+    loadSuggestions();
+    setInterval(loadSuggestions, 30000); // refresh every 30s
+  };
 </script>
 
 </body>
