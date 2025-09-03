@@ -339,25 +339,22 @@ class SafaChatWidget extends HTMLElement {
       showBotTyping();
 
       try {
-        const res = await fetch(
-          "https://hf.space/embed/Venunath/safa-video-api/+/api/predict/",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ data: [message] }),
-          }
-        );
+        const res = await fetch("https://safarepo-mcto.onrender.com/generate-video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: message }),
+        });
 
         if (!res.ok) {
           appendMessage("bot", `Error ${res.status}: ${await res.text()}`);
+          hideBotTyping();
           return;
         }
 
-        const data = await res.json();
-        const filePath = data.data[0]; 
-        const videoUrl = `https://hf.space/embed/Venunath/safa-video-api/+/file=${filePath}`;
+        const blob = await res.blob();
+        const videoUrl = URL.createObjectURL(blob);
 
-        appendMessage("bot", `🎥 Video ready! You can watch it here:`);
+        appendMessage("bot", `🎥 Video ready! Watch or download below:`);
 
         const videoEl = document.createElement("video");
         videoEl.src = videoUrl;
@@ -375,11 +372,12 @@ class SafaChatWidget extends HTMLElement {
 
         messages.scrollTop = messages.scrollHeight;
       } catch (err) {
-        appendMessage("bot", `HF error: ${err.message}`);
+        appendMessage("bot", `HF API error: ${err.message}`);
       } finally {
         hideBotTyping();
       }
     };
+
 
 
     const showBotTyping = () => {
