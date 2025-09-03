@@ -3,17 +3,19 @@ class SafaChatWidget extends HTMLElement {
     super();
 
     // Font Awesome (optional/safe to keep)
-    if (!document.getElementById('fontawesome-css')) {
-      const link = document.createElement('link');
-      link.id = 'fontawesome-css';
-      link.rel = 'stylesheet';
-      link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    if (!document.getElementById("fontawesome-css")) {
+      const link = document.createElement("link");
+      link.id = "fontawesome-css";
+      link.rel = "stylesheet";
+      link.href =
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css";
       document.head.appendChild(link);
     }
 
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow({ mode: "open" });
 
-    this.apiKey = this.getAttribute('api-key') || 'uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5';
+    this.apiKey =
+      this.getAttribute("api-key") || "uKI5Y2zgfmak6NpVVVsD7Hcxy9W1Teq5";
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -37,7 +39,22 @@ class SafaChatWidget extends HTMLElement {
 
         /* Interactive children accept clicks */
         #chat-button, #chat-box, #chat-label { pointer-events: auto; }
-
+        #hf-btn {
+          background: var(--primary-gradient);
+          color: white;
+          border: none;
+          border-radius: var(--border-radius);
+          padding: 8px 12px;
+          font-size: 14px;
+          cursor: pointer;
+          font-weight: 600;
+          box-shadow: 0 0 12px rgba(183, 126, 220, 0.7);
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        #hf-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 20px rgba(183, 126, 220, 1);
+        }
         /* Bubble */
         #chat-button {
           position: fixed;
@@ -280,6 +297,11 @@ class SafaChatWidget extends HTMLElement {
               <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
             </svg>
           </button>
+          <button 
+            className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none"
+          >
+            Generate Video
+          </button>
 
           <button id="predict-btn" title="Get prediction" aria-label="Predict">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -299,24 +321,74 @@ class SafaChatWidget extends HTMLElement {
         </div>
       </div>
     `;
-
   }
 
   connectedCallback() {
-    const button = this.shadowRoot.querySelector('#chat-button');
-    const chatBox = this.shadowRoot.querySelector('#chat-box');
-    const input = this.shadowRoot.querySelector('#input input');
-    const sendBtn = this.shadowRoot.querySelector('#send-btn');
-    const micBtn = this.shadowRoot.querySelector('#mic-btn');
-    const messages = this.shadowRoot.querySelector('#messages');
-    const typingIndicator = this.shadowRoot.querySelector('#typing-indicator');
-    const predictBtn = this.shadowRoot.querySelector('#predict-btn');
+    const button = this.shadowRoot.querySelector("#chat-button");
+    const chatBox = this.shadowRoot.querySelector("#chat-box");
+    const input = this.shadowRoot.querySelector("#input input");
+    const sendBtn = this.shadowRoot.querySelector("#send-btn");
+    const micBtn = this.shadowRoot.querySelector("#mic-btn");
+    const messages = this.shadowRoot.querySelector("#messages");
+    const typingIndicator = this.shadowRoot.querySelector("#typing-indicator");
+    const predictBtn = this.shadowRoot.querySelector("#predict-btn");
+    const hfBtn = this.shadowRoot.querySelector("#hf-btn");
     let typingBubbleEl = null;
+    hfBtn.onclick = async () => {
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = "";
+      appendMessage("user", message);
+      showBotTyping();
+
+      try {
+        const res = await fetch(
+          "https://venunath-safa-video-api.hf.space/run/predict",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ data: [message] }),
+          }
+        );
+
+        if (!res.ok) {
+          appendMessage("bot", `Error ${res.status}: ${await res.text()}`);
+          return;
+        }
+
+        const data = await res.json();
+        const filePath = data.data[0]; 
+        const videoUrl = `https://venunath-safa-video-api.hf.space/${filePath}`;
+
+        appendMessage("bot", `🎥 Video ready! You can watch it here:`);
+
+        const videoEl = document.createElement("video");
+        videoEl.src = videoUrl;
+        videoEl.controls = true;
+        videoEl.style.maxWidth = "100%";
+        messages.appendChild(videoEl);
+
+        const dl = document.createElement("a");
+        dl.href = videoUrl;
+        dl.download = "safa_video.mp4";
+        dl.textContent = "⬇️ Download Video";
+        dl.style.display = "block";
+        dl.style.marginTop = "6px";
+        messages.appendChild(dl);
+
+        messages.scrollTop = messages.scrollHeight;
+      } catch (err) {
+        appendMessage("bot", `HF error: ${err.message}`);
+      } finally {
+        hideBotTyping();
+      }
+    };
 
     const showBotTyping = () => {
       if (typingBubbleEl) return;
-      typingBubbleEl = document.createElement('div');
-      typingBubbleEl.className = 'bot-msg typing-bubble';
+      typingBubbleEl = document.createElement("div");
+      typingBubbleEl.className = "bot-msg typing-bubble";
       typingBubbleEl.innerHTML = `
         <div class="typing-dots">
           <span></span><span></span><span></span>
@@ -334,27 +406,28 @@ class SafaChatWidget extends HTMLElement {
     };
 
     // Lottie (once)
-    if (!document.getElementById('lottie-player-script')) {
-      const script = document.createElement('script');
-      script.id = 'lottie-player-script';
-      script.src = 'https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js';
+    if (!document.getElementById("lottie-player-script")) {
+      const script = document.createElement("script");
+      script.id = "lottie-player-script";
+      script.src =
+        "https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js";
       document.head.appendChild(script);
     }
 
     // Append chat message
     const appendMessage = (sender, text) => {
-      const div = document.createElement('div');
-      div.className = sender === 'user' ? 'user-msg' : 'bot-msg';
-      div.textContent = `${sender === 'user' ? 'You' : 'Safa'}: ${text}`;
+      const div = document.createElement("div");
+      div.className = sender === "user" ? "user-msg" : "bot-msg";
+      div.textContent = `${sender === "user" ? "You" : "Safa"}: ${text}`;
       messages.appendChild(div);
       messages.scrollTop = messages.scrollHeight;
     };
 
     // Send normal chat
     const sendMessage = async (message) => {
-      appendMessage('user', message);
+      appendMessage("user", message);
       showBotTyping();
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       try {
         const res = await fetch("https://safarepo-mcto.onrender.com/chat", {
@@ -368,15 +441,15 @@ class SafaChatWidget extends HTMLElement {
 
         if (!res.ok) {
           const errorText = await res.text();
-          appendMessage('bot', `Error ${res.status}: ${errorText}`);
+          appendMessage("bot", `Error ${res.status}: ${errorText}`);
           hideBotTyping();
           return;
         }
 
         const data = await res.json();
-        appendMessage('bot', data.reply);
+        appendMessage("bot", data.reply);
       } catch (err) {
-        appendMessage('bot', `Network error: ${err.message}`);
+        appendMessage("bot", `Network error: ${err.message}`);
       } finally {
         hideBotTyping();
       }
@@ -385,17 +458,17 @@ class SafaChatWidget extends HTMLElement {
     // Predict
     predictBtn.onclick = async () => {
       showBotTyping();
-      await new Promise(resolve => setTimeout(resolve, 50));
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       const message = input.value.trim();
       if (!message) {
-        appendMessage('bot', "Please enter a message before predicting.");
+        appendMessage("bot", "Please enter a message before predicting.");
         hideBotTyping();
         return;
       }
 
-      input.value = '';
-      appendMessage('user', message);
+      input.value = "";
+      appendMessage("user", message);
 
       try {
         const res = await fetch("https://safarepo-mcto.onrender.com/predict", {
@@ -409,17 +482,17 @@ class SafaChatWidget extends HTMLElement {
 
         if (!res.ok) {
           const errorText = await res.text();
-          appendMessage('bot', `Error ${res.status}: ${errorText}`);
+          appendMessage("bot", `Error ${res.status}: ${errorText}`);
           hideBotTyping();
           return;
         }
 
         const data = await res.json();
 
-        let botMessage = '';
+        let botMessage = "";
         if (data.predictions) {
-          const months = data.predictions.futureMonths?.join(', ') || '';
-          const sales = data.predictions.predictedSales?.join(', ') || '';
+          const months = data.predictions.futureMonths?.join(", ") || "";
+          const sales = data.predictions.predictedSales?.join(", ") || "";
           botMessage += `📈 Sales prediction for months [${months}]: [${sales}]\n\n`;
         }
         if (data.suggestions) {
@@ -427,9 +500,9 @@ class SafaChatWidget extends HTMLElement {
         }
         if (!botMessage) botMessage = "No prediction or suggestions available.";
 
-        appendMessage('bot', botMessage);
+        appendMessage("bot", botMessage);
       } catch (err) {
-        appendMessage('bot', `Prediction error: ${err.message}`);
+        appendMessage("bot", `Prediction error: ${err.message}`);
       } finally {
         hideBotTyping();
       }
@@ -437,7 +510,8 @@ class SafaChatWidget extends HTMLElement {
 
     // Toggle open/close
     button.onclick = () => {
-      chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
+      chatBox.style.display =
+        chatBox.style.display === "none" ? "flex" : "none";
       input.focus();
     };
 
@@ -445,26 +519,27 @@ class SafaChatWidget extends HTMLElement {
     sendBtn.onclick = () => {
       const message = input.value.trim();
       if (!message) return;
-      input.value = '';
+      input.value = "";
       sendMessage(message);
     };
 
     // Send via Enter
-    input.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         const message = input.value.trim();
         if (!message) return;
-        input.value = '';
+        input.value = "";
         sendMessage(message);
       }
     });
 
     // Voice (if available)
-    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if ("webkitSpeechRecognition" in window || "SpeechRecognition" in window) {
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
+      recognition.lang = "en-US";
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
 
@@ -478,12 +553,16 @@ class SafaChatWidget extends HTMLElement {
         micBtn.disabled = false;
         sendBtn.click();
       };
-      recognition.onerror = () => { micBtn.disabled = false; };
-      recognition.onend = () => { micBtn.disabled = false; };
+      recognition.onerror = () => {
+        micBtn.disabled = false;
+      };
+      recognition.onend = () => {
+        micBtn.disabled = false;
+      };
     } else {
-      micBtn.style.display = 'none';
+      micBtn.style.display = "none";
     }
   }
 }
 
-customElements.define('safa-chat-widget', SafaChatWidget);
+customElements.define("safa-chat-widget", SafaChatWidget);
