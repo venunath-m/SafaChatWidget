@@ -333,53 +333,52 @@ class SafaChatWidget extends HTMLElement {
     hfBtn.onclick = async () => {
       const message = input.value.trim();
       if (!message) return;
-
       input.value = "";
       appendMessage("user", message);
       showBotTyping();
 
       try {
+        // Step 1: Create job
         const res = await fetch("https://safarepo-mcto.onrender.com/generate-video", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             "x-api-key": this.apiKey,
           },
-          body: JSON.stringify({ prompt: message }),
+          body: JSON.stringify({ prompt: message })
         });
+        const { job_id } = await res.json();
 
-        if (!res.ok) {
-          appendMessage("bot", `Error ${res.status}: ${await res.text()}`);
-          hideBotTyping();
-          return;
+        // Step 2: Poll until done
+        let videoUrl = null;
+        while (!videoUrl) {
+          await new Promise(r => setTimeout(r, 5000)); // wait 5 sec
+          const statusRes = await fetch(`https://safarepo-mcto.onrender.com/video-status/${job_id}`);
+          const statusData = await statusRes.json();
+          if (statusData.status === "complete") {
+            videoUrl = `https://safarepo-mcto.onrender.com/video-download/${job_id}`;
+          } else if (statusData.status === "error") {
+            appendMessage("bot", "Video generation failed: " + statusData.result);
+            hideBotTyping();
+            return;
+          }
         }
 
-        const blob = await res.blob();
-        const videoUrl = URL.createObjectURL(blob);
-
-        appendMessage("bot", `🎥 Video ready! Watch or download below:`);
-
+        // Step 3: Show video
+        appendMessage("bot", `🎥 Video ready!`);
         const videoEl = document.createElement("video");
         videoEl.src = videoUrl;
         videoEl.controls = true;
         videoEl.style.maxWidth = "100%";
         messages.appendChild(videoEl);
-
-        const dl = document.createElement("a");
-        dl.href = videoUrl;
-        dl.download = "safa_video.mp4";
-        dl.textContent = "⬇️ Download Video";
-        dl.style.display = "block";
-        dl.style.marginTop = "6px";
-        messages.appendChild(dl);
-
         messages.scrollTop = messages.scrollHeight;
       } catch (err) {
-        appendMessage("bot", `HF API error: ${err.message}`);
+        appendMessage("bot", "Error: " + err.message);
       } finally {
         hideBotTyping();
       }
     };
+
 
 
 
