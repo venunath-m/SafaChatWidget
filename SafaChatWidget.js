@@ -334,8 +334,11 @@ class SafaChatWidget extends HTMLElement {
       const message = input.value.trim();
       if (!message) return;
       input.value = "";
+
       appendMessage("user", message);
-      showBotTyping();
+
+      // Show processing animation
+      showBotTyping("Generating video... 🎥");
 
       try {
         // Step 1: Create job
@@ -355,27 +358,33 @@ class SafaChatWidget extends HTMLElement {
           await new Promise(r => setTimeout(r, 5000)); // wait 5 sec
           const statusRes = await fetch(`https://safarepo-mcto.onrender.com/video-status/${job_id}`);
           const statusData = await statusRes.json();
+
           if (statusData.status === "complete") {
             videoUrl = `https://safarepo-mcto.onrender.com/video-download/${job_id}`;
           } else if (statusData.status === "error") {
             appendMessage("bot", "Video generation failed: " + statusData.result);
             hideBotTyping();
             return;
+          } else {
+            // Optional: update typing message
+            typingBubbleEl.innerHTML = `<div class="typing-dots"><span></span><span></span><span></span></div> Generating video... 🎬`;
           }
         }
 
-        // Step 3: Show video
-        appendMessage("bot", `🎥 Video ready!`);
+        // Step 3: Hide animation & show video
+        hideBotTyping();
+        appendMessage("bot", `🎥 Video ready! Watch or download below:`);
+
         const videoEl = document.createElement("video");
         videoEl.src = videoUrl;
         videoEl.controls = true;
         videoEl.style.maxWidth = "100%";
         messages.appendChild(videoEl);
         messages.scrollTop = messages.scrollHeight;
+
       } catch (err) {
-        appendMessage("bot", "Error: " + err.message);
-      } finally {
         hideBotTyping();
+        appendMessage("bot", "Error: " + err.message);
       }
     };
 
