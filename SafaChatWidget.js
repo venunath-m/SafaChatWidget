@@ -341,7 +341,10 @@ class SafaChatWidget extends HTMLElement {
       try {
         const res = await fetch("https://safarepo-mcto.onrender.com/generate-video", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": this.apiKey,
+          },
           body: JSON.stringify({ prompt: message }),
         });
 
