@@ -298,7 +298,7 @@ class SafaChatWidget extends HTMLElement {
             </svg>
           </button>
           <button 
-            className="px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none"
+            id="hf-btn"
           >
             Generate Video
           </button>
