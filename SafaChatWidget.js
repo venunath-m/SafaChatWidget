@@ -340,7 +340,7 @@ class SafaChatWidget extends HTMLElement {
 
       try {
         const res = await fetch(
-          "https://venunath-safa-video-api.hf.space/embed/Venunath/safa-video-api/api/predict",
+          "https://hf.space/embed/Venunath/safa-video-api/+/api/predict/",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -355,7 +355,7 @@ class SafaChatWidget extends HTMLElement {
 
         const data = await res.json();
         const filePath = data.data[0]; 
-        const videoUrl = `https://venunath-safa-video-api.hf.space/embed/Venunath/safa-video-api${filePath}`;
+        const videoUrl = `https://hf.space/embed/Venunath/safa-video-api/+/file=${filePath}`;
 
         appendMessage("bot", `🎥 Video ready! You can watch it here:`);
 
@@ -380,6 +380,7 @@ class SafaChatWidget extends HTMLElement {
         hideBotTyping();
       }
     };
+
 
     const showBotTyping = () => {
       if (typingBubbleEl) return;
