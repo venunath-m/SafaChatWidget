@@ -297,11 +297,7 @@ class SafaChatWidget extends HTMLElement {
               <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
             </svg>
           </button>
-          <button 
-            id="hf-btn"
-          >
-            Generate Video
-          </button>
+          <button id="hf-btn">🎥</button>
 
           <button id="predict-btn" title="Get prediction" aria-label="Predict">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -344,7 +340,7 @@ class SafaChatWidget extends HTMLElement {
 
       try {
         const res = await fetch(
-          "https://venunath-safa-video-api.hf.space/run/predict",
+          "https://venunath-safa-video-api.hf.space/embed/Venunath/safa-video-api/api/predict",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -359,7 +355,7 @@ class SafaChatWidget extends HTMLElement {
 
         const data = await res.json();
         const filePath = data.data[0]; 
-        const videoUrl = `https://venunath-safa-video-api.hf.space/${filePath}`;
+        const videoUrl = `https://venunath-safa-video-api.hf.space/embed/Venunath/safa-video-api${filePath}`;
 
         appendMessage("bot", `🎥 Video ready! You can watch it here:`);
 
